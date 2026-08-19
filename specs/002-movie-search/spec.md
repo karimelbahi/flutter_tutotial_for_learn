@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-20
 
-**Status**: Draft
+**Status**: Planned
 
 **Input**: User description: "Build the movie search screen: debounced text search, scrollable result list with poster/title/release date, clear button, tap result → movie detail. Match reference TMDB movie app search layout and dark theme. Replace the search placeholder from 001-movie-home."
 
