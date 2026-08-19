@@ -8,6 +8,7 @@ import '../../../../core/constants/app_typography.dart';
 import '../../domain/entities/movie.dart';
 import '../cubit/top_rated_movies_cubit.dart';
 import '../cubit/top_rated_movies_state.dart';
+import '../navigation/movie_navigation.dart';
 import 'movie_card.dart';
 import 'section_header.dart';
 
@@ -16,9 +17,7 @@ class TopRatedMoviesSection extends StatelessWidget {
   const TopRatedMoviesSection({super.key});
 
   void _onMovieTap(BuildContext context, Movie movie) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${movie.title} (${movie.id})')),
-    );
+    navigateToMovieDetail(context, movie.id);
   }
 
   @override

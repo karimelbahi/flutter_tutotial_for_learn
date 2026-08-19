@@ -15,6 +15,11 @@
     "title": "Search",
     "placeholder": "Full search screen is planned for spec 002-movie-search."
   },
+  "detail": {
+    "title": "Movie Detail",
+    "placeholder": "Full detail screen is planned for spec 003-movie-detail.",
+    "movie_id": "Movie ID: {}"
+  },
   "common": {
     "back": "Back",
     "retry": "Retry",

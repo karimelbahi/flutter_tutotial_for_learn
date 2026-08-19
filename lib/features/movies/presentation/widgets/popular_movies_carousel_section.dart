@@ -9,6 +9,7 @@ import '../../../../core/constants/app_typography.dart';
 import '../../domain/entities/movie.dart';
 import '../cubit/popular_movies_cubit.dart';
 import '../cubit/popular_movies_state.dart';
+import '../navigation/movie_navigation.dart';
 import 'carousel_item.dart';
 import 'dot_indicator.dart';
 
@@ -30,9 +31,7 @@ class _PopularMoviesCarouselSectionState
   static const _maxSlides = 5;
 
   void _onMovieTap(Movie movie) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${movie.title} (${movie.id})')),
-    );
+    navigateToMovieDetail(context, movie.id);
   }
 
   @override

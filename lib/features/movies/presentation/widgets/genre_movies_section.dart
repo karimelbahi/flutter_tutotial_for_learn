@@ -9,6 +9,7 @@ import '../../domain/entities/genre.dart';
 import '../../domain/entities/movie.dart';
 import '../cubit/genre_movies_cubit.dart';
 import '../cubit/genre_movies_state.dart';
+import '../navigation/movie_navigation.dart';
 import 'movie_card.dart';
 
 /// Genre TabBar + horizontal movie row (Step 5).
@@ -44,9 +45,7 @@ class _GenreMoviesSectionState extends State<GenreMoviesSection>
   }
 
   void _onMovieTap(Movie movie) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${movie.title} (${movie.id})')),
-    );
+    navigateToMovieDetail(context, movie.id);
   }
 
   @override

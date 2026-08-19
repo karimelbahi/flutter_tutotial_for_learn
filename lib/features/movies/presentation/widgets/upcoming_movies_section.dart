@@ -8,6 +8,7 @@ import '../../../../core/constants/app_typography.dart';
 import '../../domain/entities/movie.dart';
 import '../cubit/upcoming_movies_cubit.dart';
 import '../cubit/upcoming_movies_state.dart';
+import '../navigation/movie_navigation.dart';
 import 'movie_card.dart';
 import 'section_header.dart';
 
@@ -16,9 +17,7 @@ class UpcomingMoviesSection extends StatelessWidget {
   const UpcomingMoviesSection({super.key});
 
   void _onMovieTap(BuildContext context, Movie movie) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${movie.title} (${movie.id})')),
-    );
+    navigateToMovieDetail(context, movie.id);
   }
 
   String _releaseLabel(Movie movie) {

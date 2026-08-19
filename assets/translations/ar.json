@@ -15,6 +15,11 @@
     "title": "بحث",
     "placeholder": "شاشة البحث الكاملة مخططة في spec 002-movie-search."
   },
+  "detail": {
+    "title": "تفاصيل الفيلم",
+    "placeholder": "شاشة التفاصيل الكاملة مخططة في spec 003-movie-detail.",
+    "movie_id": "معرف الفيلم: {}"
+  },
   "common": {
     "back": "رجوع",
     "retry": "إعادة المحاولة",

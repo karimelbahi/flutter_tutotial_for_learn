@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../domain/entities/movie.dart';
+import '../navigation/movie_navigation.dart';
 import '../widgets/carousel_item.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/dot_indicator.dart';
@@ -82,6 +83,10 @@ class _WidgetPreviewScreenState extends State<WidgetPreviewScreen> {
     );
   }
 
+  void _onMovieTap(Movie movie) {
+    navigateToMovieDetail(context, movie.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,7 +125,7 @@ class _WidgetPreviewScreenState extends State<WidgetPreviewScreen> {
                     return CarouselItem(
                       title: movie.title,
                       backdropPath: movie.backdropPath,
-                      onTap: () => _showSnack('Tapped: ${movie.title}'),
+                      onTap: () => _onMovieTap(movie),
                     );
                   },
                 ),
@@ -150,7 +155,7 @@ class _WidgetPreviewScreenState extends State<WidgetPreviewScreen> {
                   posterPath: movie.posterPath,
                   rating: movie.posterPath != null ? movie.voteAverage : null,
                   subtitle: movie.releaseYear,
-                  onTap: () => _showSnack('Tapped: ${movie.title}'),
+                  onTap: () => _onMovieTap(movie),
                 );
               },
             ),
@@ -173,7 +178,7 @@ class _WidgetPreviewScreenState extends State<WidgetPreviewScreen> {
                   title: movie.title,
                   posterPath: movie.posterPath,
                   subtitle: movie.releaseYear ?? 'TBA',
-                  onTap: () => _showSnack('Tapped: ${movie.title}'),
+                  onTap: () => _onMovieTap(movie),
                 );
               },
             ),
