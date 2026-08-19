@@ -41,6 +41,15 @@ class MovieRepositoryImpl implements MovieRepository {
     return _fetchMovies(_remoteDataSource.fetchUpcomingMovies);
   }
 
+  @override
+  Future<Result<List<Movie>>> searchMovies(String query) {
+    final trimmed = query.trim();
+    if (trimmed.isEmpty) {
+      return Future.value(const Success([]));
+    }
+    return _fetchMovies(() => _remoteDataSource.fetchSearchMovies(trimmed));
+  }
+
   /// Shared error-handling wrapper for all fetch methods.
   Future<Result<List<Movie>>> _fetchMovies(
     Future<List<MovieModel>> Function() fetch,

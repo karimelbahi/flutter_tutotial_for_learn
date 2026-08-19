@@ -15,6 +15,8 @@ abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> fetchTopRatedMovies();
 
   Future<List<MovieModel>> fetchUpcomingMovies();
+
+  Future<List<MovieModel>> fetchSearchMovies(String query);
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -66,6 +68,18 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       AppConfig.apiKey,
       _page,
       _language,
+    );
+    return response.results;
+  }
+
+  @override
+  Future<List<MovieModel>> fetchSearchMovies(String query) async {
+    final response = await _api.searchMovies(
+      AppConfig.apiKey,
+      query,
+      _page,
+      _language,
+      false,
     );
     return response.results;
   }

@@ -44,4 +44,14 @@ abstract class TmdbApi {
     @Query('page') int page,
     @Query('language') String language,
   );
+
+  /// TMDB movie search — used by the search screen (spec 002).
+  @GET('/search/movie')
+  Future<TmdbMoviesResponse> searchMovies(
+    @Query('api_key') String apiKey,
+    @Query('query') String query,
+    @Query('page') int page,
+    @Query('language') String language,
+    @Query('include_adult') bool includeAdult,
+  );
 }
