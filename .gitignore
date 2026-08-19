@@ -46,3 +46,24 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# FVM (Flutter Version Management)
+.fvm/
+
+# Legacy Flutter plugin tracking
+.flutter-plugins
+
+# Local build outputs
+*.apk
+*.aab
+*.ipa
+
+# OS generated
+Thumbs.db
+ehthumbs.db
+Desktop.ini
