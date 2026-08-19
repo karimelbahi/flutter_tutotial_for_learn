@@ -1,6 +1,21 @@
 # flutter_tutotial_for_learn
 
-A Flutter movie app inspired by [flutter-tmdbmovie-bloc-cubit](https://github.com/ihsaninh/flutter-tmdbmovie-bloc-cubit). Built step by step with Cubit, Dio, and TMDB API — matching the reference app's design and features.
+A Flutter movie app inspired by [flutter-tmdbmovie-bloc-cubit](https://github.com/ihsaninh/flutter-tmdbmovie-bloc-cubit). Built step by step with **Clean Architecture (Feature-First)**, Cubit, Dio, easy_localization (en/ar), and TMDB API — matching the reference app's design and features.
+
+## Documentation
+
+| Resource | Path |
+|----------|------|
+| Architecture guide | [docs/architecture.md](docs/architecture.md) |
+| Folder structure | [docs/folder-structure.md](docs/folder-structure.md) |
+| Tech stack | [docs/tech-stack.md](docs/tech-stack.md) |
+| Development workflow | [docs/development-workflow.md](docs/development-workflow.md) |
+| Boilerplate templates | [docs/boilerplate-templates.md](docs/boilerplate-templates.md) |
+
+### Cursor AI (skill + rules)
+
+- **Skill:** `.cursor/skills/flutter-movie-app/SKILL.md` — agent workflow for this project
+- **Rules:** `.cursor/rules/` — Clean Architecture conventions applied automatically
 
 ## Getting Started
 
