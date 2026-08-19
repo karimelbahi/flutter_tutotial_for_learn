@@ -30,6 +30,10 @@ abstract final class AppSpacing {
   static const double carouselHeight = 220;
   static const double horizontalListHeight = movieCardTotalHeight;
 
+  /// Search result row poster (reference list tile leading image).
+  static const double searchListPosterWidth = 50;
+  static const double searchListPosterHeight = 75;
+
   static const double dotSize = 5;
   static const double dotMarginVertical = 10;
   static const double dotMarginHorizontal = 3;

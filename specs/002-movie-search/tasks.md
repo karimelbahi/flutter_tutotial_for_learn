@@ -38,9 +38,9 @@ description: "Task list for movie search screen — one commit per deliverable"
 
 **Commit**: `feat(movies): add search presentation widgets`
 
-- [ ] T006 [P] Port `lib/features/movies/presentation/widgets/search_form_field.dart` from reference
-- [ ] T007 [P] Port `lib/features/movies/presentation/widgets/list_tile_search.dart` from reference
-- [ ] T008 [P] Add `@Preview` wrappers for both widgets in their files
+- [x] T006 [P] Port `lib/features/movies/presentation/widgets/search_form_field.dart` from reference
+- [x] T007 [P] Port `lib/features/movies/presentation/widgets/list_tile_search.dart` from reference
+- [x] T008 [P] Add `@Preview` wrappers for both widgets in their files
 
 **Checkpoint**: Widget previews run; tokens used (`AppColors`, `AppTypography`, `AppConfig.imageUrl`)
 
