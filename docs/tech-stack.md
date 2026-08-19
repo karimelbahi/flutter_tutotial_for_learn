@@ -9,7 +9,8 @@ dependencies:
   flutter_bloc: ^9.x      # Cubit state management
   equatable: ^2.x         # Value equality for states
   easy_localization: ^3.x # i18n (en, ar)
-  dio: ^5.x               # HTTP client
+  dio: ^5.x               # HTTP engine for Retrofit
+  retrofit: ^4.x          # Typed REST API client
   hive: ^2.x              # Local NoSQL storage
   hive_flutter: ^1.x      # Hive Flutter integration
   flutter_secure_storage: ^9.x  # Encrypted key-value storage
@@ -83,16 +84,24 @@ locale: context.locale,
 
 **Widget usage:** `'home.title'.tr()`
 
-## Networking — `dio`
+## Networking — Retrofit + Dio
 
-Central client: `lib/core/network/dio_client.dart`
+**Retrofit** defines typed API interfaces; **Dio** is the HTTP engine configured once in core.
+
+| Layer | File | Role |
+|-------|------|------|
+| Core | `lib/core/network/dio_factory.dart` | Shared Dio: base URL, timeouts, interceptors |
+| Feature | `lib/features/movies/data/api/tmdb_api.dart` | Retrofit `@GET` endpoints |
+| Feature | `lib/features/movies/data/api/tmdb_api_provider.dart` | Creates `TmdbApi` from `DioFactory` |
+| Data | `movie_remote_data_source.dart` | Calls `TmdbApi` methods, returns models |
 
 - Base URL from `AppConfig.baseUrl`
 - Timeouts: connect 15s, receive 30s
-- `AuthInterceptor` reads token from `SecureStorageService`
+- `ErrorInterceptor` maps Dio errors to `NetworkException` / `ServerException`
 - Log interceptor in debug only
+- Codegen: `dart run build_runner build --delete-conflicting-outputs`
 
-Repositories never create their own `Dio()` instances.
+Feature code MUST NOT create its own `Dio()` instances or call `dio.get()` directly.
 
 ## Local Storage
 

@@ -2,7 +2,7 @@
 name: flutter-movie-app
 description: >-
   Build the flutter_tutotial_for_learn TMDB movie app using Clean Architecture
-  (feature-first), Cubit-only state management, easy_localization (en/ar), Dio,
+  (feature-first), Cubit-only state management, easy_localization (en/ar), Retrofit,
   Hive, and project design tokens. Use when implementing features, screens,
   repositories, cubits, localization, networking, or storage in this project.
 ---
@@ -13,7 +13,7 @@ description: >-
 
 Apply this skill when working on `flutter_tutotial_for_learn` and the user asks to:
 - Add a screen, feature, Cubit, repository, or use case
-- Set up localization, Dio, Hive, or storage
+- Set up localization, Retrofit, Hive, or storage
 - Refactor toward `lib/features/` structure
 - Match the reference app design ([flutter-tmdbmovie-bloc-cubit](https://github.com/ihsaninh/flutter-tmdbmovie-bloc-cubit))
 
@@ -39,7 +39,7 @@ Before coding, skim these project docs (in order):
 |---------|---------|------|
 | State | `flutter_bloc` | **Cubit only** — no BLoC events unless user requests |
 | i18n | `easy_localization` | All UI strings via `.tr()`; update `en.json` + `ar.json` |
-| HTTP | `dio` | Use `DioClient` singleton — never `Dio()` in features |
+| HTTP | `retrofit` + `dio` | Retrofit `TmdbApi` in feature `data/api/` — never raw `Dio()` or `dio.get()` in features |
 | Cache | `hive` / `hive_flutter` | Via `HiveService` in `core/storage/` |
 | Secrets | `flutter_secure_storage` | Tokens only — not in SharedPreferences |
 | Prefs | `shared_preferences` | Flags, onboarding, non-sensitive settings |

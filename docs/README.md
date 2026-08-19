@@ -6,7 +6,7 @@ Guides for building this Flutter movie app with Clean Architecture.
 |----------|-------------|
 | [architecture.md](./architecture.md) | Clean Architecture layers, dependency rules, data flow |
 | [folder-structure.md](./folder-structure.md) | Directory tree, naming conventions, feature checklist |
-| [tech-stack.md](./tech-stack.md) | Libraries: Cubit, easy_localization, Dio, Hive, storage |
+| [tech-stack.md](./tech-stack.md) | Libraries: Cubit, easy_localization, Retrofit, Hive, storage |
 | [development-workflow.md](./development-workflow.md) | Step-by-step feature development, commits, migration |
 | [boilerplate-templates.md](./boilerplate-templates.md) | Copy-paste templates for each layer |
 | [reference-repo.md](./reference-repo.md) | **Local reference clone path** (design source) |

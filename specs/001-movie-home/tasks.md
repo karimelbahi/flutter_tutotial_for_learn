@@ -34,14 +34,15 @@ description: "Task list for movie home screen — one commit per deliverable"
 
 **Purpose**: Core network + error layer — **Step 0 in plan**
 
-**Commit**: `chore(movies): add core DioClient and shared errors`
+**Commit**: `chore(movies): add core Retrofit client and shared errors`
 
 - [ ] T006 Create `lib/core/errors/exceptions.dart` with ServerException, NetworkException
 - [ ] T007 Create `lib/core/errors/failures.dart` with Failure, ServerFailure, NetworkFailure (Equatable)
-- [ ] T008 Create `lib/core/network/dio_client.dart` singleton with get(), timeouts, debug LogInterceptor
-- [ ] T009 Initialize DioClient in `lib/main.dart` after `dotenv.load()`
+- [ ] T008 Create `lib/core/network/dio_factory.dart` (Dio HTTP engine) + `error_interceptor.dart`
+- [ ] T008b Create `lib/features/movies/data/api/tmdb_api.dart` (Retrofit) + run `build_runner`
+- [ ] T009 Initialize `DioFactory` and `TmdbApiProvider` in `lib/main.dart` after `dotenv.load()`
 
-**Checkpoint**: `dart analyze lib/core/` passes; DioClient ready for datasources
+**Checkpoint**: `dart analyze lib/core/` passes; Retrofit `TmdbApi` ready for datasources
 
 ---
 
@@ -184,7 +185,7 @@ Phase 1 Setup → Phase 2 Foundational (blocks all) → Phase 3 Data/Domain
 | Order | Commit message |
 |-------|----------------|
 | 1 | `chore(movies): add feature folder structure and localization scaffold` |
-| 2 | `chore(movies): add core DioClient and shared errors` |
+| 2 | `chore(movies): add core Retrofit client and shared errors` |
 | 3 | `feat(movies): add movie domain model and repository` |
 | 4 | `feat(movies): port shared presentation widgets` |
 | 5 | `feat(movies): add home shell and custom app bar` |

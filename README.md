@@ -1,6 +1,6 @@
 # flutter_tutotial_for_learn
 
-A Flutter movie app inspired by [flutter-tmdbmovie-bloc-cubit](https://github.com/ihsaninh/flutter-tmdbmovie-bloc-cubit). Built step by step with **Clean Architecture (Feature-First)**, Cubit, Dio, easy_localization (en/ar), and TMDB API — matching the reference app's design and features.
+A Flutter movie app inspired by [flutter-tmdbmovie-bloc-cubit](https://github.com/ihsaninh/flutter-tmdbmovie-bloc-cubit). Built step by step with **Clean Architecture (Feature-First)**, Cubit, Retrofit, easy_localization (en/ar), and TMDB API — matching the reference app's design and features.
 
 ## Documentation
 
@@ -60,6 +60,8 @@ When you run the app, this is what happens:
 main.dart
   → MovieApp.initialize()     (Flutter binding, portrait lock)
   → dotenv.load('.env')       (load TMDB API key + URLs)
+  → DioFactory.configure()    (shared Dio HTTP engine)
+  → TmdbApiProvider.configure() (Retrofit TMDB client)
   → runApp(MovieApp)
       → MaterialApp
           → theme: AppTheme.dark
@@ -72,6 +74,8 @@ main.dart
 Future<void> main() async {
   await MovieApp.initialize();
   await dotenv.load(fileName: '.env');
+  DioFactory.instance.configure();
+  TmdbApiProvider.instance.configure();
   runApp(const MovieApp());
 }
 ```
@@ -80,7 +84,8 @@ Three things happen before any UI appears:
 
 1. **`MovieApp.initialize()`** — prepares Flutter (binding, portrait-only lock)
 2. **`dotenv.load('.env')`** — loads your TMDB API key and URLs from the local `.env` file
-3. **`runApp(const MovieApp())`** — starts the widget tree
+3. **`DioFactory` + `TmdbApiProvider`** — configure shared HTTP (Dio) and typed Retrofit API client
+4. **`runApp(const MovieApp())`** — starts the widget tree
 
 ### Step 2 — `MovieApp` (root widget)
 
@@ -119,20 +124,22 @@ Currently this is a **placeholder** screen that shows the look and feel. Next st
 | **App shell** | `lib/app/` | Theme, routing, global setup |
 | **Screens** | `lib/screens/` | One folder per screen (UI only) |
 | **State** | `lib/blocs/` *(next)* | Cubits manage loading/success/error |
-| **Data** | `lib/repositories/` *(next)* | HTTP calls via Dio |
+| **Data** | `lib/features/movies/data/` | Retrofit API + datasources + repository impl |
 | **Models** | `lib/models/` *(next)* | Parse JSON from TMDB |
 | **Design** | `lib/core/` | Colors, spacing, typography, theme |
 | **Config** | `lib/core/config/` | API URLs using `.env` keys |
 
-### Data flow (coming next)
+### Data flow (Step 1+)
 
 ```
 User opens app
   → MovieHomeScreen builds
-  → PopularMovieCubit.getPopularMovies()
-  → PopularMovieRepository calls TMDB
-  → JSON → MovieList model
-  → Cubit emits LoadSuccess
+  → PopularMoviesCubit.load()
+  → GetPopularMoviesUseCase.call()
+  → MovieRepositoryImpl → MovieRemoteDataSource
+  → TmdbApi.getPopularMovies()   [Retrofit]
+  → MovieModel → Movie entity
+  → Cubit emits Success
   → BlocBuilder rebuilds UI with carousel + cards
 ```
 
@@ -150,16 +157,18 @@ User opens app
 
 ```
 lib/
-├── main.dart                 ← starts everything
+├── main.dart                 ← starts everything (DioFactory + TmdbApiProvider)
 ├── app/
 │   └── app.dart              ← MaterialApp + theme
 ├── core/
 │   ├── config/app_config.dart    ← TMDB URLs (uses .env)
 │   ├── constants/                ← design tokens
+│   ├── network/dio_factory.dart  ← shared Dio (Retrofit engine)
 │   └── theme/app_theme.dart      ← dark theme
-└── screens/
-    └── movie_home/
-        └── movie_home_screen.dart  ← first screen UI
+└── features/movies/
+    ├── data/api/tmdb_api.dart    ← Retrofit TMDB endpoints
+    ├── data/datasources/         ← calls TmdbApi
+    └── domain/                   ← entities, repos, use cases
 ```
 
 ---
@@ -200,7 +209,7 @@ Matched to the reference TMDB movie app.
 |------|--------|----------------|
 | 1 | Done | Project setup, dependencies, `.env` |
 | 2 | Done | Design tokens + app shell + home placeholder |
-| 3 | Next | API layer — models, repositories, Cubits |
+| 3 | In progress | Retrofit API + domain/data layers (Step 0–1) |
 | 4 | | Home screen — popular carousel + sections |
 | 5 | | Movie cards + top-rated / upcoming rows |
 | 6 | | Genre tabs + filtered lists |

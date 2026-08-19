@@ -19,13 +19,14 @@ Reference clone (for visual comparison):
 
 ---
 
-## Step 0 — DioClient
+## Step 0 — Retrofit + DioFactory
 
-**Study**: How HTTP is centralized before any feature code.
+**Study**: How HTTP is centralized (DioFactory) and typed (Retrofit TmdbApi) before feature code.
 
 **Validate**:
 ```bash
-dart analyze lib/core/network/
+dart run build_runner build --delete-conflicting-outputs
+dart analyze lib/core/network/ lib/features/movies/data/api/
 ```
 
 ---

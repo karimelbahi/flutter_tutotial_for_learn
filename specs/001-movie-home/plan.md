@@ -23,7 +23,7 @@ Movie Detail (`003`).
 
 **Language/Version**: Dart 3.13+ / Flutter 3.47 (stable)
 
-**Primary Dependencies**: flutter_bloc, equatable, dio, flutter_dotenv,
+**Primary Dependencies**: flutter_bloc, equatable, retrofit, dio, flutter_dotenv,
 carousel_slider, flutter_rating_bar, easy_localization (to add), hive (later cache)
 
 **Storage**: TMDB remote API primary; Hive cache optional in later iteration
@@ -50,7 +50,7 @@ carousel_slider, flutter_rating_bar, easy_localization (to add), hive (later cac
 | II. Cubit-only | ✅ PASS | One cubit per home section |
 | III. Localization | ✅ PASS | Add easy_localization + en/ar keys per slice |
 | IV. Reference-driven UI | ✅ PASS | Port widgets from local reference clone |
-| V. Security & Simplicity | ✅ PASS | AppConfig + DioClient; minimal diff per commit |
+| V. Security & Simplicity | ✅ PASS | AppConfig + DioFactory + Retrofit; minimal diff per commit |
 
 **Post-design re-check**: ✅ No violations. Repository + use case pattern justified for testability and learning.
 
@@ -70,7 +70,7 @@ Each step: **implement → run app → study code → commit → push → then n
 
 | Step | Commit message (suggested) | What you learn | Deliverable |
 |------|--------------------------|----------------|-------------|
-| **0** | `chore(movies): add core DioClient and shared errors` | Networking layer | `core/network/`, `core/errors/` |
+| **0** | `chore(movies): add core Retrofit client and shared errors` | Networking layer | `core/network/`, `core/errors/`, `features/movies/data/api/` |
 | **1** | `feat(movies): add movie domain model and repository` | Data + domain layers | Model, datasource, repo, use case |
 | **2** | `feat(movies): port shared presentation widgets` | Reusable UI | movie_card, section_header, etc. |
 | **3** | `feat(movies): add home shell and custom app bar` | Screen scaffold | Shell + search nav placeholder |
@@ -116,10 +116,12 @@ lib/
 │   ├── config/app_config.dart          # exists
 │   ├── constants/                      # design tokens (exist)
 │   ├── errors/failures.dart            # step 0
-│   ├── network/dio_client.dart         # step 0
+│   ├── network/dio_factory.dart        # step 0 — Dio HTTP engine
 │   └── theme/app_theme.dart            # exists
 └── features/movies/
     ├── data/
+    │   ├── api/tmdb_api.dart           # step 0 — Retrofit interface
+    │   ├── api/tmdb_api_provider.dart
     │   ├── models/movie_model.dart
     │   ├── datasources/movie_remote_data_source.dart
     │   └── repositories/movie_repository_impl.dart

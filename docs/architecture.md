@@ -6,7 +6,7 @@ This project follows **Clean Architecture** with a **Feature-First** folder layo
 
 - **Testable**: business logic is isolated from Flutter widgets and HTTP.
 - **Scalable**: new features are added as self-contained modules.
-- **Maintainable**: dependencies point inward; UI never talks to Dio directly.
+- **Maintainable**: dependencies point inward; UI never talks to HTTP APIs directly.
 - **Consistent**: every feature follows the same Cubit → UseCase → Repository pattern.
 
 ## Layer Diagram
@@ -27,7 +27,7 @@ This project follows **Clean Architecture** with a **Feature-First** folder layo
 ┌───────────────────────────▼─────────────────────────────┐
 │                       Data                               │
 │  models/, datasources/, repositories/ (impl)             │
-│  Depends on: domain contracts + core (Dio, Hive, etc.)   │
+│  Depends on: domain contracts + core (DioFactory, Hive, etc.)   │
 └───────────────────────────┬─────────────────────────────┘
                             │
 ┌───────────────────────────▼─────────────────────────────┐
@@ -59,8 +59,8 @@ MovieHomeScreen
   → GetPopularMoviesUseCase.call()
   → MovieRepository.getPopularMovies()        [abstract, domain]
   → MovieRepositoryImpl.getPopularMovies()    [data]
-  → MovieRemoteDataSource.fetchPopular()
-  → DioClient.get('/movie/popular')
+  → MovieRemoteDataSource.fetchPopularMovies()
+  → TmdbApi.getPopularMovies()              [Retrofit, feature data/api/]
   → JSON → MovieModel → entity/UI model
   → Cubit emits PopularMoviesSuccess(movies)
   → BlocBuilder rebuilds carousel
@@ -83,10 +83,11 @@ MovieHomeScreen
 
 ## Networking
 
-- Single `DioClient` singleton in `lib/core/network/dio_client.dart`
-- Auth interceptor attaches tokens from secure storage
-- Repositories use datasources; datasources use `DioClient`
-- Map Dio errors to app failures in `lib/core/errors/`
+- **Retrofit** typed API interfaces in `lib/features/<feature>/data/api/` (e.g. `TmdbApi`)
+- **DioFactory** in `lib/core/network/dio_factory.dart` — configures Dio once as Retrofit's HTTP engine (timeouts, interceptors, debug logging)
+- Datasources call Retrofit methods — never raw `dio.get()` or manual JSON parsing in repositories
+- Map HTTP errors to app failures in `lib/core/errors/` via `ErrorInterceptor`
+- Regenerate Retrofit code after API changes: `dart run build_runner build --delete-conflicting-outputs`
 
 ## Current vs Target Structure
 

@@ -22,9 +22,9 @@ lib/
 │   │   ├── failures.dart              # ServerFailure, CacheFailure, etc.
 │   │   └── exceptions.dart            # ServerException, CacheException
 │   ├── network/
-│   │   ├── dio_client.dart            # Singleton Dio wrapper
+│   │   ├── dio_factory.dart           # Shared Dio instance (Retrofit HTTP engine)
 │   │   └── interceptors/
-│   │       └── auth_interceptor.dart  # Attach token from secure storage
+│   │       └── error_interceptor.dart # Maps HTTP errors to typed exceptions
 │   ├── storage/
 │   │   ├── hive_service.dart          # Hive init + box helpers
 │   │   ├── secure_storage_service.dart
@@ -38,6 +38,9 @@ lib/
 └── features/
     ├── movies/                        # Example: TMDB movie feature
     │   ├── data/
+    │   │   ├── api/
+    │   │   │   ├── tmdb_api.dart          # Retrofit interface
+    │   │   │   └── tmdb_api_provider.dart # Provides configured TmdbApi
     │   │   ├── models/
     │   │   │   └── movie_model.dart
     │   │   ├── datasources/

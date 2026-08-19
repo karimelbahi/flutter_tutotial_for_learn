@@ -11,14 +11,14 @@ This is a **Clean Architecture, feature-first** TMDB movie app.
 
 - State: **Cubit only** (`flutter_bloc`) — no BLoC events by default
 - i18n: `easy_localization` — `'key'.tr()` for all UI text; update `en.json` + `ar.json`
-- Network: `DioClient` in `core/network/` — no raw `Dio()` in features
+- Network: Retrofit `TmdbApi` in feature `data/api/` — no raw `Dio()` or `dio.get()` in features
 - Storage: Hive (cache), `flutter_secure_storage` (tokens), `shared_preferences` (flags)
 
 ## Layer Rules
 
 - Features live under `lib/features/<name>/` with `data/`, `domain/`, `presentation/`
 - Presentation → domain use cases/repositories (abstract), never data impls
-- Data implements domain contracts; uses `core/` for Dio and storage
+- Data implements domain contracts; uses `core/` for DioFactory and storage
 - Shared design tokens: `AppColors`, `AppSpacing`, `AppTypography` in `core/constants/`
 
 ## Before Implementing

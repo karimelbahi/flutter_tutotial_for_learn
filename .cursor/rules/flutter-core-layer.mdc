@@ -15,16 +15,16 @@ alwaysApply: false
 | `config/` | Env-based app config (`AppConfig`) |
 | `constants/` | Design tokens, routes |
 | `errors/` | `Failure`, `Exception` types |
-| `network/` | `DioClient`, interceptors |
+| `network/` | `DioFactory`, interceptors |
 | `storage/` | Hive, secure storage, preferences services |
 | `theme/` | `AppTheme` |
 | `utils/` | Debouncer, extensions |
 
-## DioClient
+## DioFactory
 
 - Single singleton; configured once at app startup
-- Auth interceptor reads from `SecureStorageService`
-- Features access network only through datasources
+- Provides Dio instance used by Retrofit API clients in feature `data/api/` layers
+- Features access network only through datasources → Retrofit interfaces
 
 ## Storage Split
 

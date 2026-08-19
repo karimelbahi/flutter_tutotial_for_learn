@@ -121,7 +121,7 @@ Migrate one feature at a time; keep app runnable after each step.
 | Step | Task                                              |
 |------|---------------------------------------------------|
 | ✅   | Design tokens, app shell, docs                    |
-| 🔜   | Core: DioClient, storage services, errors         |
+| 🔜   | Core: DioFactory, Retrofit API, storage services, errors |
 | 🔜   | easy_localization setup + translation files         |
 | 🔜   | Feature: movies — popular list + home carousel      |
 | 🔜   | Feature: movies — detail, search, genres          |

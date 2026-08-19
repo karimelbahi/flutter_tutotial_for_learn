@@ -94,45 +94,60 @@ MaterialApp(
 )
 ```
 
-## DioClient — core/network/dio_client.dart
+## DioFactory — core/network/dio_factory.dart
+
+Retrofit uses Dio internally. Configure Dio once in core; feature Retrofit APIs receive it.
 
 ```dart
 import 'package:dio/dio.dart';
 
 import '../config/app_config.dart';
-import 'interceptors/auth_interceptor.dart';
+import 'interceptors/error_interceptor.dart';
 
-class DioClient {
-  DioClient._(this._dio);
+class DioFactory {
+  DioFactory._();
+  static final DioFactory instance = DioFactory._();
 
-  static final DioClient instance = DioClient._(Dio());
+  late final Dio dio;
 
-  final Dio _dio;
-
-  Dio get dio => _dio;
-
-  void configure({required AuthInterceptor authInterceptor}) {
-    _dio
-      ..options = BaseOptions(
-        baseUrl: AppConfig.baseUrl,
-        connectTimeout: const Duration(seconds: 15),
-        receiveTimeout: const Duration(seconds: 30),
-        headers: {'Accept': 'application/json'},
-      )
-      ..interceptors.addAll([
-        authInterceptor,
-        LogInterceptor(requestBody: true, responseBody: true),
-      ]);
+  void configure() {
+    dio = Dio(BaseOptions(
+      baseUrl: AppConfig.baseUrl,
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: const {'Accept': 'application/json'},
+    ));
+    dio.interceptors.add(ErrorInterceptor());
   }
 
-  Future<Response<T>> get<T>(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-  }) {
-    return _dio.get<T>(path, queryParameters: queryParameters);
-  }
+  Dio get client => dio;
 }
 ```
+
+## TmdbApi — features/movies/data/api/tmdb_api.dart
+
+```dart
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+import '../models/tmdb_movies_response.dart';
+
+part 'tmdb_api.g.dart';
+
+@RestApi()
+abstract class TmdbApi {
+  factory TmdbApi(Dio dio, {String? baseUrl}) = _TmdbApi;
+
+  @GET('/movie/popular')
+  Future<TmdbMoviesResponse> getPopularMovies(
+    @Query('api_key') String apiKey,
+    @Query('page') int page,
+    @Query('language') String language,
+  );
+}
+```
+
+Regenerate after changes: `dart run build_runner build --delete-conflicting-outputs`
 
 ## Auth Interceptor — core/network/interceptors/auth_interceptor.dart
 
@@ -202,17 +217,17 @@ abstract class MovieRemoteDataSource {
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
-  MovieRemoteDataSourceImpl(this._client);
-  final DioClient _client;
+  MovieRemoteDataSourceImpl(this._api);
+  final TmdbApi _api;
 
   @override
   Future<List<MovieModel>> fetchPopularMovies() async {
-    final response = await _client.get(
-      '/movie/popular',
-      queryParameters: {'api_key': AppConfig.apiKey},
+    final response = await _api.getPopularMovies(
+      AppConfig.apiKey,
+      1,
+      'en-US',
     );
-    final results = response.data['results'] as List<dynamic>;
-    return results.map((e) => MovieModel.fromJson(e)).toList();
+    return response.results;
   }
 }
 ```
@@ -259,11 +274,16 @@ dependencies:
   equatable: ^2.0.7
   easy_localization: ^3.0.7
   dio: ^5.9.0
+  retrofit: ^4.9.2
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   flutter_secure_storage: ^9.2.4
   shared_preferences: ^2.5.3
   flutter_dotenv: ^5.2.1
+
+dev_dependencies:
+  build_runner: ^2.x
+  retrofit_generator: ^10.x
 
 flutter:
   assets:

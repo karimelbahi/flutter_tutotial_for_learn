@@ -1,8 +1,8 @@
 <!--
 Sync Impact Report
-- Version change: (template) → 1.0.0
-- Modified principles: All placeholders replaced with project-specific principles
-- Added sections: Technology Stack Requirements, Development Workflow & Spec Kit
+- Version change: 1.0.0 → 1.1.0
+- Modified principles: V (Networking — DioClient → Retrofit + DioFactory)
+- Added sections: None
 - Removed sections: None
 - Deferred TODOs: None
 -->
@@ -17,7 +17,7 @@ Every feature MUST live under `lib/features/<feature_name>/` with three layers:
 `data/`, `domain/`, and `presentation/`. Shared infrastructure MUST stay in
 `lib/core/`. Dependencies MUST point inward: Presentation → Domain → Data → Core.
 Presentation MUST NOT import data implementations directly. Widgets MUST NOT call
-Dio or HTTP APIs directly.
+Retrofit, Dio, or HTTP APIs directly.
 
 **Rationale:** Keeps the TMDB movie app testable, scalable, and consistent as
 features grow (home, search, detail, genres).
@@ -27,7 +27,7 @@ features grow (home, search, detail, genres).
 State management MUST use `flutter_bloc` with **Cubit only** (no BLoC event
 classes unless explicitly requested). Each screen or cohesive flow MUST have its
 own Cubit and Equatable states named: `Initial`, `Loading`, `Success`, `Failure`.
-Cubits MUST call use cases or domain repositories — never datasources or Dio.
+Cubits MUST call use cases or domain repositories — never datasources, Retrofit, or Dio.
 
 **Rationale:** Matches the reference app pattern while keeping state logic simple
 and learnable.
@@ -62,8 +62,9 @@ stays modern and maintainable.
 API keys and secrets MUST live in `.env` (gitignored) and be read via `AppConfig`.
 `.env` MUST NEVER be committed. Use `flutter_secure_storage` for sensitive tokens,
 Hive for structured cache, and `shared_preferences` for simple flags. Networking
-MUST go through a single `DioClient` in `core/network/`. Prefer the smallest
-correct change; avoid over-engineering and unrelated refactors.
+MUST use **Retrofit** typed API interfaces in feature `data/api/` layers, backed by
+a single **DioFactory** in `core/network/` (Dio is Retrofit's HTTP engine only).
+Prefer the smallest correct change; avoid over-engineering and unrelated refactors.
 
 **Rationale:** Prevents credential leaks and keeps the learning-focused codebase
 focused.
@@ -76,7 +77,7 @@ The following stack is mandatory unless this constitution is amended:
 |---------|---------|
 | State | `flutter_bloc` (Cubit) |
 | i18n | `easy_localization` |
-| HTTP | `dio` via `DioClient` |
+| HTTP | `retrofit` + `dio` (via `DioFactory` + feature `TmdbApi`) |
 | Local cache | `hive`, `hive_flutter` |
 | Secure storage | `flutter_secure_storage` |
 | Preferences | `shared_preferences` |
@@ -120,4 +121,4 @@ usage, localization keys, design tokens, and no committed secrets.
 **Runtime guidance:** Use `docs/architecture.md`, `docs/development-workflow.md`,
 and `.cursor/skills/flutter-movie-app/SKILL.md` for detailed conventions.
 
-**Version**: 1.0.0 | **Ratified**: 2026-08-20 | **Last Amended**: 2026-08-20
+**Version**: 1.1.0 | **Ratified**: 2026-08-20 | **Last Amended**: 2026-08-20

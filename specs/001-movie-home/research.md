@@ -16,12 +16,13 @@ one cubit at a time.
 
 ## R2 — Networking
 
-**Decision**: Single `DioClient` singleton in `core/network/`; movie datasources use it
+**Decision**: Retrofit `TmdbApi` in `features/movies/data/api/`; shared `DioFactory` in `core/network/`
 
-**Rationale**: Constitution requirement; centralizes timeouts, logging, future auth interceptor.
+**Rationale**: Typed endpoints, less boilerplate than manual Dio calls; Dio configured once as Retrofit's HTTP engine.
 
 **Alternatives considered**:
-- Raw `Dio()` per repository — rejected; matches reference but violates constitution
+- Manual `DioClient.get()` per endpoint — rejected; more error-prone, no compile-time checks
+- Raw `Dio()` per repository — rejected; violates constitution
 
 ## R3 — API configuration
 

@@ -10,6 +10,7 @@ Each feature under `lib/features/<name>/` must have three layers.
 
 ## data/
 
+- `api/` — Retrofit interfaces (`tmdb_api.dart`) + provider
 - `models/` — JSON serialization, `fromJson`/`toJson`
 - `datasources/` — `*_remote_data_source.dart`, `*_local_data_source.dart`
 - `repositories/` — `*_repository_impl.dart` implements domain contract
@@ -37,8 +38,8 @@ class PopularMoviesCubit extends Cubit<PopularMoviesState> {
   }
 }
 
-// ❌ Cubit calls Dio directly
-final response = await dio.get('/movie/popular');
+// ❌ Cubit calls Retrofit/Dio directly
+final response = await tmdbApi.getPopularMovies(...);
 ```
 
 Templates: `docs/boilerplate-templates.md`
