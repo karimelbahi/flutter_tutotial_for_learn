@@ -102,9 +102,9 @@ description: "Task list for movie search screen — one commit per deliverable"
 
 **Commit**: `docs(movies): validate search screen against quickstart checklist`
 
-- [ ] T022 Run full `specs/002-movie-search/quickstart.md` validation scenarios
-- [ ] T023 Run `dart analyze lib/` and `flutter test`
-- [ ] T024 Mark completed items in `specs/002-movie-search/checklists/implementation-validation.md` (create at converge)
+- [x] T022 Run full `specs/002-movie-search/quickstart.md` validation scenarios
+- [x] T023 Run `dart analyze lib/` and `flutter test`
+- [x] T024 Mark completed items in `specs/002-movie-search/checklists/implementation-validation.md`
 
 ---
 

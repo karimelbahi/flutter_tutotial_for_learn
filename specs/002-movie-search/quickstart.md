@@ -11,7 +11,7 @@ cp .env.example .env   # TMDB API_KEY required
 flutter pub get
 ```
 
-Home screen (`001-movie-home`) must be complete — search icon on home opens placeholder until step 3.
+Home screen (`001-movie-home`) must be complete — search icon on home opens the search screen.
 
 Reference clone (visual comparison):
 
@@ -69,9 +69,9 @@ flutter widget-preview start
 dart analyze lib/features/movies/presentation/widgets/
 ```
 
-- [ ] Search field: autofocus, white hint text, no border (matches reference)
-- [ ] List tile: poster left, title + year subtitle, tap callback
-- [ ] Missing poster shows placeholder (not broken image)
+- [x] Search field: autofocus, white hint text, no border (matches reference)
+- [x] List tile: poster left, title + year subtitle, tap callback
+- [x] Missing poster shows placeholder (not broken image)
 
 **Commit**:
 
@@ -103,14 +103,14 @@ dart analyze lib/
 
 Manual checks:
 
-- [ ] Home search icon opens real search screen (not placeholder)
-- [ ] Typing `"Batman"` shows debounced loading then results (~1s delay)
-- [ ] Rapid typing shows only latest query results (no stale flash)
-- [ ] Clear (X) empties field and body
-- [ ] Nonsense query shows empty-state message
-- [ ] Tap result opens detail placeholder with correct movie ID
-- [ ] Back returns to home
-- [ ] Toggle Arabic locale — search strings translated
+- [x] Home search icon opens real search screen (not placeholder)
+- [x] Typing `"Batman"` shows debounced loading then results (~1s delay)
+- [x] Rapid typing shows only latest query results (no stale flash) — cubit unit test
+- [x] Clear (X) empties field and body
+- [x] Nonsense query shows empty-state message
+- [x] Tap result opens detail placeholder with correct movie ID
+- [x] Back returns to home
+- [x] Toggle Arabic locale — search strings translated
 
 **Commit**:
 

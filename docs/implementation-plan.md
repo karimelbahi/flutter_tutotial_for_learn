@@ -216,16 +216,16 @@ main.dart
 
 | Task | Description | Status |
 |------|-------------|--------|
-| 8.1 | Spec + plan + tasks — `specs/002-movie-search/` | 🔄 plan done; tasks pending |
-| 8.2 | Domain: `SearchMovies` use case + repository method | ⬜ |
-| 8.3 | Data: Retrofit `search/movie` endpoint + model mapping | ⬜ |
-| 8.4 | Core: `Debouncer` utility (`core/utils/debouncer.dart`) | ⬜ |
-| 8.5 | UI: Port `search_form_field.dart` | ⬜ |
-| 8.6 | UI: Port `list_tile_search.dart` | ⬜ |
-| 8.7 | Cubit: `SearchMoviesCubit` — query, loading, empty, error | ⬜ |
-| 8.8 | UI: `SearchScreen` — debounced input, clear button, results | ⬜ |
-| 8.9 | Navigation: result tap → `MovieDetailScreen` | ⬜ |
-| 8.10 | i18n: search hints, empty state, errors (en + ar) | ⬜ |
+| 8.1 | Spec + plan + tasks — `specs/002-movie-search/` | ✅ |
+| 8.2 | Domain: `SearchMovies` use case + repository method | ✅ |
+| 8.3 | Data: Retrofit `search/movie` endpoint + model mapping | ✅ |
+| 8.4 | Core: `Debouncer` utility (`core/utils/debouncer.dart`) | ✅ |
+| 8.5 | UI: Port `search_form_field.dart` | ✅ |
+| 8.6 | UI: Port `list_tile_search.dart` | ✅ |
+| 8.7 | Cubit: `SearchMoviesCubit` — query, loading, empty, error | ✅ |
+| 8.8 | UI: `SearchScreen` — debounced input, clear button, results | ✅ |
+| 8.9 | Navigation: result tap → detail placeholder (`movieId`) | ✅ |
+| 8.10 | i18n: search hints, empty state, errors (en + ar) | ✅ |
 
 **Reference**: `flutter-tmdbmovie-bloc-cubit/lib/screens/search.dart`
 
@@ -325,18 +325,16 @@ Phase 4  Core network            ███████████████�
 Phase 5  Domain & data           ████████████████████  100%  ✅
 Phase 6  Shared widgets          ████████████████████  100%  ✅
 Phase 7  Home screen             ████████████████████  100%  ✅
-Phase 8  Search screen           ░░░░░░░░░░░░░░░░░░░░    0%  ⬜  ← YOU ARE HERE
-Phase 9  Detail screen           ░░░░░░░░░░░░░░░░░░░░    0%  ⬜
+Phase 8  Search screen           ████████████████████  100%  ✅
+Phase 9  Detail screen           ░░░░░░░░░░░░░░░░░░░░    0%  ⬜  ← YOU ARE HERE
 Phase 10 Polish                  ██░░░░░░░░░░░░░░░░░░   10%  🔄
 ```
 
 ### Next action
 
-1. **Run `/speckit-tasks`** for `specs/002-movie-search/` (plan complete).
-2. **Implement step 1** — search domain + data layer (`SearchMovies` use case, Retrofit endpoint).
-3. Continue Phase 8 one commit at a time per [quickstart.md](../specs/002-movie-search/quickstart.md).
-
-Run `/speckit-implement` or ask the agent to implement **only the next unchecked task** in `specs/002-movie-search/tasks.md` after tasks are generated.
+1. **Run `/speckit-specify`** (or use existing plan) for `003-movie-detail`.
+2. **Run `/speckit-plan`** and `/speckit-tasks` for detail screen.
+3. Implement detail one commit at a time per `docs/implementation-plan.md` Phase 9.
 
 ---
 
