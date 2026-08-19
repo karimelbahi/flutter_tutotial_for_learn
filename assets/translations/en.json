@@ -13,7 +13,9 @@
   },
   "search": {
     "title": "Search",
-    "placeholder": "Full search screen is planned for spec 002-movie-search."
+    "hint": "Search",
+    "empty": "No movies found for your search.",
+    "error": "Could not load search results."
   },
   "detail": {
     "title": "Movie Detail",

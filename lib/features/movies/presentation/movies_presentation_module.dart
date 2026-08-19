@@ -4,8 +4,10 @@ import '../domain/usecases/get_genre_movies.dart';
 import '../domain/usecases/get_popular_movies.dart';
 import '../domain/usecases/get_top_rated_movies.dart';
 import '../domain/usecases/get_upcoming_movies.dart';
+import '../domain/usecases/search_movies.dart';
 import 'cubit/genre_movies_cubit.dart';
 import 'cubit/popular_movies_cubit.dart';
+import 'cubit/search_movies_cubit.dart';
 import 'cubit/top_rated_movies_cubit.dart';
 import 'cubit/upcoming_movies_cubit.dart';
 
@@ -34,4 +36,9 @@ TopRatedMoviesCubit createTopRatedMoviesCubit() {
 UpcomingMoviesCubit createUpcomingMoviesCubit() {
   final repository = _sharedMovieRepository();
   return UpcomingMoviesCubit(GetUpcomingMovies(repository));
+}
+
+SearchMoviesCubit createSearchMoviesCubit() {
+  final repository = _sharedMovieRepository();
+  return SearchMoviesCubit(SearchMovies(repository));
 }

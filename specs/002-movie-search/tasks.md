@@ -54,13 +54,13 @@ description: "Task list for movie search screen — one commit per deliverable"
 
 **Commit**: `feat(movies): add search screen with debounced cubit` (shared with US2/US3)
 
-- [ ] T009 [US1] Create `lib/core/utils/debouncer.dart` from reference
-- [ ] T010 [US1] Create `lib/features/movies/presentation/cubit/search_movies_state.dart`
-- [ ] T011 [US1] Create `lib/features/movies/presentation/cubit/search_movies_cubit.dart` with stale-query guard
-- [ ] T012 [US1] Create `lib/features/movies/presentation/screens/search_screen.dart` (search field in app bar, debounced query, result list)
-- [ ] T013 [US1] Wire `AppRoutes.search` to `SearchScreen` in `lib/app/app_router.dart`
-- [ ] T014 [US1] Remove `lib/features/movies/presentation/screens/search_placeholder_screen.dart`
-- [ ] T015 [US1] Add i18n keys `search.hint`, `search.empty`, `search.error` in `assets/translations/en.json` and `ar.json`
+- [x] T009 [US1] Create `lib/core/utils/debouncer.dart` from reference
+- [x] T010 [US1] Create `lib/features/movies/presentation/cubit/search_movies_state.dart`
+- [x] T011 [US1] Create `lib/features/movies/presentation/cubit/search_movies_cubit.dart` with stale-query guard
+- [x] T012 [US1] Create `lib/features/movies/presentation/screens/search_screen.dart` (search field in app bar, debounced query, result list)
+- [x] T013 [US1] Wire `AppRoutes.search` to `SearchScreen` in `lib/app/app_router.dart`
+- [x] T014 [US1] Remove `lib/features/movies/presentation/screens/search_placeholder_screen.dart`
+- [x] T015 [US1] Add i18n keys `search.hint`, `search.empty`, `search.error` in `assets/translations/en.json` and `ar.json`
 
 **Checkpoint**: Search from home works; results load after ~1s debounce; tap navigates with correct `movieId`
 
@@ -74,9 +74,9 @@ description: "Task list for movie search screen — one commit per deliverable"
 
 **Commit**: same as Phase 3 (`feat(movies): add search screen with debounced cubit`)
 
-- [ ] T016 [US2] Add clear `IconButton` to `search_screen.dart` app bar actions
-- [ ] T017 [US2] Implement `_onPressClear` — empty controller + `SearchMoviesCubit.reset()`
-- [ ] T018 [US2] Ensure in-flight search does not repopulate list after clear (cubit query guard)
+- [x] T016 [US2] Add clear `IconButton` to `search_screen.dart` app bar actions
+- [x] T017 [US2] Implement `_onPressClear` — empty controller + `SearchMoviesCubit.reset()`
+- [x] T018 [US2] Ensure in-flight search does not repopulate list after clear (cubit query guard)
 
 **Checkpoint**: One-tap clear returns to initial state (SC-004)
 
@@ -90,9 +90,9 @@ description: "Task list for movie search screen — one commit per deliverable"
 
 **Commit**: same as Phase 3
 
-- [ ] T019 [US3] Add `SearchMoviesEmpty` state and UI in `search_screen.dart`
-- [ ] T020 [US3] Add `SearchMoviesFailure` state with retry in `search_movies_cubit.dart` + screen
-- [ ] T021 [US3] Add localized empty/error strings in `en.json` + `ar.json`
+- [x] T019 [US3] Add `SearchMoviesEmpty` state and UI in `search_screen.dart`
+- [x] T020 [US3] Add `SearchMoviesFailure` state with retry in `search_movies_cubit.dart` + screen
+- [x] T021 [US3] Add localized empty/error strings in `en.json` + `ar.json`
 
 **Checkpoint**: Empty, error, and initial states are visually distinct (SC-006)
 

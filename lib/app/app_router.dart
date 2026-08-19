@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/movies/presentation/screens/movie_detail_placeholder_screen.dart';
 import '../../features/movies/presentation/screens/movie_home_screen.dart';
-import '../../features/movies/presentation/screens/search_placeholder_screen.dart';
+import '../../features/movies/presentation/screens/search_screen.dart';
 import '../../features/movies/presentation/screens/widget_preview_screen.dart';
 import '../core/constants/app_routes.dart';
 
@@ -18,7 +18,7 @@ abstract final class AppRouter {
       case AppRoutes.search:
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => const SearchPlaceholderScreen(),
+          builder: (_) => const SearchScreen(),
         );
       case AppRoutes.movieDetail:
         final movieId = settings.arguments;
