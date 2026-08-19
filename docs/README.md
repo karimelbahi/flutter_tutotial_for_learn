@@ -9,6 +9,15 @@ Guides for building this Flutter movie app with Clean Architecture.
 | [tech-stack.md](./tech-stack.md) | Libraries: Cubit, easy_localization, Dio, Hive, storage |
 | [development-workflow.md](./development-workflow.md) | Step-by-step feature development, commits, migration |
 | [boilerplate-templates.md](./boilerplate-templates.md) | Copy-paste templates for each layer |
+| [reference-repo.md](./reference-repo.md) | **Local reference clone path** (design source) |
+
+## Reference app (local clone)
+
+```
+/Users/karimelbahi/Programming/Android/Study/Flutter/flutter-tmdbmovie-bloc-cubit
+```
+
+See [reference-repo.md](./reference-repo.md) for file mapping and refresh commands.
 
 ## Cursor AI Setup
 

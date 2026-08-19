@@ -17,6 +17,14 @@ Apply this skill when working on `flutter_tutotial_for_learn` and the user asks 
 - Refactor toward `lib/features/` structure
 - Match the reference app design ([flutter-tmdbmovie-bloc-cubit](https://github.com/ihsaninh/flutter-tmdbmovie-bloc-cubit))
 
+## Local Reference Clone
+
+```
+/Users/karimelbahi/Programming/Android/Study/Flutter/flutter-tmdbmovie-bloc-cubit
+```
+
+Read widgets/screens from this path when porting UI. Details: [docs/reference-repo.md](../../docs/reference-repo.md)
+
 ## Read First
 
 Before coding, skim these project docs (in order):
