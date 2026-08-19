@@ -1,0 +1,44 @@
+---
+description: Feature-first layer conventions for lib/features
+globs: lib/features/**/*.dart
+alwaysApply: false
+---
+
+# Feature Module Conventions
+
+Each feature under `lib/features/<name>/` must have three layers.
+
+## data/
+
+- `models/` — JSON serialization, `fromJson`/`toJson`
+- `datasources/` — `*_remote_data_source.dart`, `*_local_data_source.dart`
+- `repositories/` — `*_repository_impl.dart` implements domain contract
+
+## domain/
+
+- `repositories/` — abstract classes only
+- `usecases/` — one public `call()` method per use case
+
+## presentation/
+
+- `cubit/` — `{name}_cubit.dart` + `{name}_state.dart` (Equatable)
+- `screens/` — `{name}_screen.dart`
+- `widgets/` — feature-specific reusable widgets
+
+## Example
+
+```dart
+// ✅ Cubit calls use case
+class PopularMoviesCubit extends Cubit<PopularMoviesState> {
+  Future<void> load() async {
+    emit(PopularMoviesLoading());
+    final result = await _getPopularMovies();
+    // emit Success or Failure
+  }
+}
+
+// ❌ Cubit calls Dio directly
+final response = await dio.get('/movie/popular');
+```
+
+Templates: `docs/boilerplate-templates.md`

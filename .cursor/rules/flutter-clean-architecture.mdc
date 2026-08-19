@@ -1,0 +1,37 @@
+---
+description: Core Clean Architecture standards for the Flutter movie app
+alwaysApply: true
+---
+
+# Flutter Movie App — Project Standards
+
+This is a **Clean Architecture, feature-first** TMDB movie app.
+
+## Stack
+
+- State: **Cubit only** (`flutter_bloc`) — no BLoC events by default
+- i18n: `easy_localization` — `'key'.tr()` for all UI text; update `en.json` + `ar.json`
+- Network: `DioClient` in `core/network/` — no raw `Dio()` in features
+- Storage: Hive (cache), `flutter_secure_storage` (tokens), `shared_preferences` (flags)
+
+## Layer Rules
+
+- Features live under `lib/features/<name>/` with `data/`, `domain/`, `presentation/`
+- Presentation → domain use cases/repositories (abstract), never data impls
+- Data implements domain contracts; uses `core/` for Dio and storage
+- Shared design tokens: `AppColors`, `AppSpacing`, `AppTypography` in `core/constants/`
+
+## Before Implementing
+
+Read `docs/architecture.md` and `docs/development-workflow.md`.
+
+## Do Not
+
+- Hardcode secrets (use `.env` + `AppConfig`)
+- Hardcode user-facing strings or theme values in widgets
+- Use `setState` for API-driven state
+- Commit `.env`
+
+## Commits
+
+Conventional commits: `feat(movies):`, `fix:`, `docs:`, `chore:` — only when user asks to commit.

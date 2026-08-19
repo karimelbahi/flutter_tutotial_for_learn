@@ -1,0 +1,35 @@
+---
+description: Core layer conventions for lib/core
+globs: lib/core/**/*.dart
+alwaysApply: false
+---
+
+# Core Layer Conventions
+
+`lib/core/` is shared infrastructure — **no feature-specific logic**.
+
+## Subfolders
+
+| Folder | Purpose |
+|--------|---------|
+| `config/` | Env-based app config (`AppConfig`) |
+| `constants/` | Design tokens, routes |
+| `errors/` | `Failure`, `Exception` types |
+| `network/` | `DioClient`, interceptors |
+| `storage/` | Hive, secure storage, preferences services |
+| `theme/` | `AppTheme` |
+| `utils/` | Debouncer, extensions |
+
+## DioClient
+
+- Single singleton; configured once at app startup
+- Auth interceptor reads from `SecureStorageService`
+- Features access network only through datasources
+
+## Storage Split
+
+- **Secure**: tokens → `flutter_secure_storage`
+- **Structured cache**: movie lists → Hive
+- **Simple flags**: onboarding done → `shared_preferences`
+
+Do not import `lib/features/` from `lib/core/`.
