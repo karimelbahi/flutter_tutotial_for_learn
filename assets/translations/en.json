@@ -1,0 +1,15 @@
+{
+  "home": {
+    "title": "Movie DB",
+    "shell_hint": "Home feed sections (carousel, genres, lists) arrive in the next steps.",
+    "carousel_empty": "No popular movies to show."
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Full search screen is planned for spec 002-movie-search."
+  },
+  "common": {
+    "back": "Back",
+    "retry": "Retry"
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -6,7 +7,7 @@ import 'core/network/dio_factory.dart';
 import 'features/movies/data/api/tmdb_api_provider.dart';
 
 Future<void> main() async {
-  // 1. Flutter engine + portrait lock
+  // 1. Flutter engine + portrait lock + localization
   await MovieApp.initialize();
 
   // 2. Load TMDB API key from .env (gitignored)
@@ -16,5 +17,12 @@ Future<void> main() async {
   DioFactory.instance.configure();
   TmdbApiProvider.instance.configure();
 
-  runApp(const MovieApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: const MovieApp(),
+    ),
+  );
 }

@@ -4,6 +4,7 @@ Guides for building this Flutter movie app with Clean Architecture.
 
 | Document | Description |
 |----------|-------------|
+| **[implementation-plan.md](./implementation-plan.md)** | **Master roadmap — all phases, tasks, checkpoints, current progress** |
 | [architecture.md](./architecture.md) | Clean Architecture layers, dependency rules, data flow |
 | [folder-structure.md](./folder-structure.md) | Directory tree, naming conventions, feature checklist |
 | [tech-stack.md](./tech-stack.md) | Libraries: Cubit, easy_localization, Retrofit, Hive, storage |
