@@ -9,10 +9,9 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/genre_movies_section.dart';
 import '../widgets/popular_movies_carousel_section.dart';
 import '../widgets/top_rated_movies_section.dart';
+import '../widgets/upcoming_movies_section.dart';
 
-/// Home screen — carousel, genres, top rated (Steps 4–6).
-///
-/// Upcoming row arrives in Step 7.
+/// Home screen — full feed: carousel → genres → top rated → upcoming.
 class MovieHomeScreen extends StatelessWidget {
   const MovieHomeScreen({super.key});
 
@@ -28,6 +27,9 @@ class MovieHomeScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => createTopRatedMoviesCubit()..load(),
+        ),
+        BlocProvider(
+          create: (_) => createUpcomingMoviesCubit()..load(),
         ),
       ],
       child: const _MovieHomeView(),
@@ -54,6 +56,7 @@ class _MovieHomeView extends StatelessWidget {
             PopularMoviesCarouselSection(),
             GenreMoviesSection(),
             TopRatedMoviesSection(),
+            UpcomingMoviesSection(),
           ],
         ),
       ),

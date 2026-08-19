@@ -6,7 +6,10 @@
     "genre_empty": "لا توجد أفلام لهذا النوع.",
     "top_rated_title": "الأعلى تقييماً",
     "top_rated_subtitle": "عرض الكل",
-    "top_rated_empty": "لا توجد أفلام الأعلى تقييماً."
+    "top_rated_empty": "لا توجد أفلام الأعلى تقييماً.",
+    "upcoming_title": "قريباً",
+    "upcoming_subtitle": "عرض الكل",
+    "upcoming_empty": "لا توجد أفلام قادمة."
   },
   "search": {
     "title": "بحث",
@@ -14,6 +17,7 @@
   },
   "common": {
     "back": "رجوع",
-    "retry": "إعادة المحاولة"
+    "retry": "إعادة المحاولة",
+    "tba": "غير محدد"
   }
 }

@@ -3,9 +3,11 @@ import '../domain/entities/genre.dart';
 import '../domain/usecases/get_genre_movies.dart';
 import '../domain/usecases/get_popular_movies.dart';
 import '../domain/usecases/get_top_rated_movies.dart';
+import '../domain/usecases/get_upcoming_movies.dart';
 import 'cubit/genre_movies_cubit.dart';
 import 'cubit/popular_movies_cubit.dart';
 import 'cubit/top_rated_movies_cubit.dart';
+import 'cubit/upcoming_movies_cubit.dart';
 
 /// Shared repository instance for home-screen cubits (Step 4+).
 MovieRepositoryImpl _sharedMovieRepository() => MovieRepositoryImpl();
@@ -27,4 +29,9 @@ GenreMoviesCubit createGenreMoviesCubit() {
 TopRatedMoviesCubit createTopRatedMoviesCubit() {
   final repository = _sharedMovieRepository();
   return TopRatedMoviesCubit(GetTopRatedMovies(repository));
+}
+
+UpcomingMoviesCubit createUpcomingMoviesCubit() {
+  final repository = _sharedMovieRepository();
+  return UpcomingMoviesCubit(GetUpcomingMovies(repository));
 }

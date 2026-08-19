@@ -6,7 +6,10 @@
     "genre_empty": "No movies found for this genre.",
     "top_rated_title": "Top Rated",
     "top_rated_subtitle": "See All",
-    "top_rated_empty": "No top rated movies to show."
+    "top_rated_empty": "No top rated movies to show.",
+    "upcoming_title": "Upcoming",
+    "upcoming_subtitle": "See All",
+    "upcoming_empty": "No upcoming movies to show."
   },
   "search": {
     "title": "Search",
@@ -14,6 +17,7 @@
   },
   "common": {
     "back": "Back",
-    "retry": "Retry"
+    "retry": "Retry",
+    "tba": "TBA"
   }
 }
