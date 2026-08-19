@@ -173,17 +173,17 @@ main.dart
 
 | Task | Description | Status |
 |------|-------------|--------|
-| 7.1 | Localization scaffold — `easy_localization`, `en.json`, `ar.json` | 🔄 |
-| 7.2 | `AppRoutes` + `AppRouter` — home, search, detail, dev preview | 🔄 |
-| 7.3 | UI: Home shell + `CustomAppBar` + search navigation | 🔄 |
-| 7.4 | UI: Search placeholder screen | 🔄 |
-| 7.5 | Remove legacy `lib/screens/movie_home/` | 🔄 |
-| 7.6 | Cubit: Popular movies carousel + dot indicators | ⬜ |
-| 7.7 | Cubit: Genre tabs (18) + horizontal filtered list | ⬜ |
-| 7.8 | Cubit: Top-rated horizontal section | ⬜ |
-| 7.9 | Cubit: Upcoming horizontal section | ⬜ |
-| 7.10 | Navigation: Movie tap → detail placeholder (pass `movieId`) | ⬜ |
-| 7.11 | Polish: quickstart validation + `dart analyze` | ⬜ |
+| 7.1 | Localization scaffold — `easy_localization`, `en.json`, `ar.json` | ✅ |
+| 7.2 | `AppRoutes` + `AppRouter` — home, search, detail, dev preview | ✅ |
+| 7.3 | UI: Home shell + `CustomAppBar` + search navigation | ✅ |
+| 7.4 | UI: Search placeholder screen | ✅ |
+| 7.5 | Remove legacy `lib/screens/movie_home/` | ✅ |
+| 7.6 | Cubit: Popular movies carousel + dot indicators | ✅ |
+| 7.7 | Cubit: Genre tabs (18) + horizontal filtered list | ✅ |
+| 7.8 | Cubit: Top-rated horizontal section | ✅ |
+| 7.9 | Cubit: Upcoming horizontal section | ✅ |
+| 7.10 | Navigation: Movie tap → detail placeholder (pass `movieId`) | ✅ |
+| 7.11 | Polish: quickstart validation + `dart analyze` | ✅ |
 
 **Checkpoint**: User can browse the full home feed; every movie tap opens a detail placeholder with the correct ID; search icon opens search placeholder.
 
@@ -216,7 +216,7 @@ main.dart
 
 | Task | Description | Status |
 |------|-------------|--------|
-| 8.1 | Spec + plan + tasks — `specs/002-movie-search/` | ⬜ |
+| 8.1 | Spec + plan + tasks — `specs/002-movie-search/` | 🔄 |
 | 8.2 | Domain: `SearchMovies` use case + repository method | ⬜ |
 | 8.3 | Data: Retrofit `search/movie` endpoint + model mapping | ⬜ |
 | 8.4 | Core: `Debouncer` utility (`core/utils/debouncer.dart`) | ⬜ |
@@ -291,7 +291,7 @@ main.dart
 | 10.3 | Consistent back navigation across all screens | ⬜ |
 | 10.4 | Full i18n audit — no hardcoded UI strings | ⬜ |
 | 10.5 | Error / empty / loading states on every screen | ⬜ |
-| 10.6 | `dart analyze lib/` clean | ⬜ |
+| 10.6 | `dart analyze lib/` clean | ✅ |
 | 10.7 | Widget tests for critical cubits (optional) | ⬜ |
 | 10.8 | Compare UI to reference screenshots (`screenshoots/ss1–ss7.jpg`) | ⬜ |
 
@@ -324,19 +324,19 @@ Phase 3  Docs & Spec Kit         ███████████████�
 Phase 4  Core network            ████████████████████  100%  ✅
 Phase 5  Domain & data           ████████████████████  100%  ✅
 Phase 6  Shared widgets          ████████████████████  100%  ✅
-Phase 7  Home screen             ████░░░░░░░░░░░░░░░░   20%  🔄  ← YOU ARE HERE
-Phase 8  Search screen           ░░░░░░░░░░░░░░░░░░░░    0%  ⬜
+Phase 7  Home screen             ████████████████████  100%  ✅
+Phase 8  Search screen           ░░░░░░░░░░░░░░░░░░░░    0%  ⬜  ← YOU ARE HERE
 Phase 9  Detail screen           ░░░░░░░░░░░░░░░░░░░░    0%  ⬜
-Phase 10 Polish                  ░░░░░░░░░░░░░░░░░░░░    0%  ⬜
+Phase 10 Polish                  ██░░░░░░░░░░░░░░░░░░   10%  🔄
 ```
 
 ### Next action
 
-1. **Commit Phase 7.1–7.5** (localization + home shell + routing) — files are staged locally.
-2. **Implement 7.6** — popular movies carousel (`PopularMoviesCubit`).
-3. Continue down Phase 7 one commit at a time.
+1. **Run `/speckit-plan`** for `specs/002-movie-search/` (spec created).
+2. **Implement 8.2** — search domain + data layer (`SearchMovies` use case, Retrofit endpoint).
+3. Continue Phase 8 one commit at a time per `docs/implementation-plan.md`.
 
-Run `/speckit-implement` or ask the agent to implement **only the next unchecked task** in `specs/001-movie-home/tasks.md`.
+Run `/speckit-implement` or ask the agent to implement **only the next unchecked task** after plan/tasks exist for `002-movie-search`.
 
 ---
 

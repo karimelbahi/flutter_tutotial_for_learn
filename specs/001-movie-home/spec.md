@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-20
 
-**Status**: Draft
+**Status**: Complete
 
 **Input**: User description: "Build the movie home screen: popular movies carousel (top 5), 18 genre tabs with filtered movie lists, horizontal top-rated row, horizontal upcoming row, search icon in app bar. Match reference TMDB movie app layout and dark cinematic theme."
 

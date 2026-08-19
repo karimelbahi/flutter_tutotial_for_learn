@@ -76,11 +76,11 @@ git push
 **Study**: `PopularMoviesCubit`, `BlocBuilder`, `CarouselSlider`, dot indicator.
 
 **Validate**:
-- [ ] Carousel shows up to 5 movies with backdrops
-- [ ] Dots sync with slide index
-- [ ] Loading spinner while fetching
-- [ ] Error + retry on failure
-- [ ] Tap navigates to detail placeholder with correct `movieId`
+- [x] Carousel shows up to 5 movies with backdrops
+- [x] Dots sync with slide index
+- [x] Loading spinner while fetching
+- [x] Error + retry on failure
+- [x] Tap navigates to detail placeholder with correct `movieId`
 
 ```bash
 flutter run
@@ -93,9 +93,9 @@ flutter run
 **Study**: `TabController`, genre cubit, tab change triggers new API call.
 
 **Validate**:
-- [ ] 18 genre tabs scroll horizontally
-- [ ] Selecting tab loads filtered movie row
-- [ ] Rapid tab switch shows latest genre only
+- [x] 18 genre tabs scroll horizontally
+- [x] Selecting tab loads filtered movie row
+- [x] Rapid tab switch shows latest genre only
 
 ---
 
@@ -104,9 +104,9 @@ flutter run
 **Study**: Independent cubit; section header widget; rating bar on cards.
 
 **Validate**:
-- [ ] "Top Rated" header visible
-- [ ] Horizontal scroll of rated movies
-- [ ] Section loads even if carousel failed
+- [x] "Top Rated" header visible
+- [x] Horizontal scroll of rated movies
+- [x] Section loads even if carousel failed
 
 ---
 
@@ -115,8 +115,8 @@ flutter run
 **Study**: Same pattern as top rated; subtitle shows release info.
 
 **Validate**:
-- [ ] Full home scroll: carousel → genres → top rated → upcoming
-- [ ] Matches reference layout order (SC-005)
+- [x] Full home scroll: carousel → genres → top rated → upcoming
+- [x] Matches reference layout order (SC-005)
 
 ---
 
@@ -125,8 +125,8 @@ flutter run
 **Study**: Named routes, passing `movieId` as argument.
 
 **Validate**:
-- [ ] Tap any movie → placeholder detail screen showing movie ID
-- [ ] Ready for spec 003-movie-detail
+- [x] Tap any movie → placeholder detail screen showing movie ID
+- [x] Ready for spec 003-movie-detail
 
 ---
 
