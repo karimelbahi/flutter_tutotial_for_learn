@@ -41,6 +41,7 @@ class MovieCard extends StatelessWidget {
           right: AppSpacing.lg,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
@@ -89,11 +90,13 @@ class MovieCard extends StatelessWidget {
                         style: AppTypography.movieCardMeta,
                       )
                     : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            rating!.toString(),
+                            rating!.toStringAsFixed(1),
                             style: AppTypography.movieCardTitle.copyWith(
                               fontWeight: FontWeight.bold,
+                              height: 1,
                             ),
                           ),
                           Padding(
@@ -105,6 +108,7 @@ class MovieCard extends StatelessWidget {
                               itemBuilder: (context, index) => const Icon(
                                 Icons.star,
                                 color: AppColors.rating,
+                                size: AppSpacing.lg,
                               ),
                             ),
                           ),
@@ -158,6 +162,20 @@ class _PosterImage extends StatelessWidget {
 // ---------------------------------------------------------------------------
 // @Preview — run: flutter widget-preview start
 // ---------------------------------------------------------------------------
+
+@Preview(
+  name: 'Two-line title + rating',
+  group: 'MovieCard',
+  wrapper: moviesDarkScaffoldWrapper,
+)
+Widget movieCardLongTitlePreview() {
+  return MovieCard(
+    title: 'Spider-Man: Brand New Day',
+    posterPath: '/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
+    rating: 7.9,
+    onTap: previewNoOp,
+  );
+}
 
 @Preview(
   name: 'Star rating row',

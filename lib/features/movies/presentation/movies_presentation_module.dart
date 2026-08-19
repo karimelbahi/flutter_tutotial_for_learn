@@ -1,13 +1,23 @@
 import '../data/repositories/movie_repository_impl.dart';
+import '../domain/entities/genre.dart';
+import '../domain/usecases/get_genre_movies.dart';
 import '../domain/usecases/get_popular_movies.dart';
+import 'cubit/genre_movies_cubit.dart';
 import 'cubit/popular_movies_cubit.dart';
 
-/// Simple factory for presentation-layer dependencies (Step 4).
-///
-/// Later steps can expand this or move to a dedicated DI package.
-/// Keeps [MovieHomeScreen] free of `new RepositoryImpl()` noise.
+/// Shared repository instance for home-screen cubits (Step 4+).
+MovieRepositoryImpl _sharedMovieRepository() => MovieRepositoryImpl();
+
 PopularMoviesCubit createPopularMoviesCubit() {
-  final repository = MovieRepositoryImpl();
-  final getPopularMovies = GetPopularMovies(repository);
-  return PopularMoviesCubit(getPopularMovies);
+  final repository = _sharedMovieRepository();
+  return PopularMoviesCubit(GetPopularMovies(repository));
+}
+
+GenreMoviesCubit createGenreMoviesCubit() {
+  final repository = _sharedMovieRepository();
+  final initialGenreId = kMovieGenres.first.id;
+  return GenreMoviesCubit(
+    GetGenreMovies(repository),
+    initialGenreId: initialGenreId,
+  )..load(initialGenreId);
 }

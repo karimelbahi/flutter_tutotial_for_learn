@@ -6,18 +6,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_routes.dart';
 import '../movies_presentation_module.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/genre_movies_section.dart';
 import '../widgets/popular_movies_carousel_section.dart';
 
-/// Home screen — app bar + popular carousel (Step 4).
+/// Home screen — carousel (Step 4) + genre tabs (Step 5).
 ///
-/// Genre tabs and horizontal rows arrive in Steps 5–7.
+/// Top rated and upcoming rows arrive in Steps 6–7.
 class MovieHomeScreen extends StatelessWidget {
   const MovieHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => createPopularMoviesCubit()..load(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => createPopularMoviesCubit()..load(),
+        ),
+        BlocProvider(
+          create: (_) => createGenreMoviesCubit(),
+        ),
+      ],
       child: const _MovieHomeView(),
     );
   }
@@ -40,6 +48,7 @@ class _MovieHomeView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PopularMoviesCarouselSection(),
+            GenreMoviesSection(),
           ],
         ),
       ),

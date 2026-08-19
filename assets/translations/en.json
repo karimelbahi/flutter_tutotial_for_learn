@@ -2,7 +2,8 @@
   "home": {
     "title": "Movie DB",
     "shell_hint": "Home feed sections (carousel, genres, lists) arrive in the next steps.",
-    "carousel_empty": "No popular movies to show."
+    "carousel_empty": "No popular movies to show.",
+    "genre_empty": "No movies found for this genre."
   },
   "search": {
     "title": "Search",

@@ -32,6 +32,8 @@ abstract final class AppTheme {
         indicatorColor: AppColors.textPrimary,
         indicatorSize: TabBarIndicatorSize.label,
         dividerColor: Colors.transparent,
+        dividerHeight: 0,
+        tabAlignment: TabAlignment.start,
         labelStyle: AppTypography.tabLabel,
         unselectedLabelStyle: AppTypography.tabLabel,
         indicator: UnderlineTabIndicator(

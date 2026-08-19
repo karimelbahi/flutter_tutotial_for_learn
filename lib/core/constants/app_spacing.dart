@@ -19,12 +19,16 @@ abstract final class AppSpacing {
   static const double moviePosterHeight = 180;
   static const double moviePosterRadius = 2;
 
+  /// Full [MovieCard] height: poster + 2-line title + rating row + padding.
+  /// Reference used 250 but rating text (13×1.3) + stars overflows by ~1px.
+  static const double movieCardTotalHeight = 252;
+
   static const double genreChipRadius = 3;
   static const double genreChipVertical = 6;
   static const double genreChipHorizontal = 12;
 
   static const double carouselHeight = 220;
-  static const double horizontalListHeight = 250;
+  static const double horizontalListHeight = movieCardTotalHeight;
 
   static const double dotSize = 5;
   static const double dotMarginVertical = 10;
