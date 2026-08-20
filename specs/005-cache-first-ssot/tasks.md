@@ -129,7 +129,7 @@ description: "Task list for cache-first SSOT — one commit per task, sequential
 - [x] T046 Update `docs/architecture.md` — SSOT data-flow diagram + Hive section
 - [x] T047 Run `dart analyze lib/` + `flutter test` — all green
 - [x] T048 Create `specs/005-cache-first-ssot/checklists/implementation-validation.md`
-- [x] T049 Run quickstart manual validation (online → offline → online)
+- [ ] T049 Run quickstart manual validation (online → offline → online)
 
 ---
 

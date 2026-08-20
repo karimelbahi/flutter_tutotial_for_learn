@@ -6,6 +6,7 @@ import '../../domain/entities/movie.dart';
 import '../../domain/usecases/refresh_popular_movies.dart';
 import '../../domain/usecases/watch_popular_movies.dart';
 import '../utils/error_messages.dart';
+import 'cache_first_load_helper.dart';
 import 'popular_movies_state.dart';
 
 /// Loads popular movies for the home carousel using **Cache-First SSOT**.
@@ -36,9 +37,10 @@ class PopularMoviesCubit extends Cubit<PopularMoviesState> {
   Future<void> load() async {
     await _subscription?.cancel();
 
-    // Step A — listen to local SSOT stream first (cache-first).
-    _subscription = _watchPopularMovies().listen(
-      _onMoviesFromCache,
+    // Step A — wait for first Hive snapshot before network refresh.
+    _subscription = await subscribeCacheWatch<List<Movie>>(
+      watch: _watchPopularMovies(),
+      onData: _onMoviesFromCache,
       onError: (_) {
         if (!_hasCache) {
           emit(PopularMoviesFailure(localizedFailureMessage(null)));
@@ -54,10 +56,7 @@ class PopularMoviesCubit extends Cubit<PopularMoviesState> {
     _hasCache = movies.isNotEmpty;
 
     if (!_hasCache) {
-      // Cold cache: keep spinner until refresh succeeds or fails.
-      if (state is! PopularMoviesFailure) {
-        emit(const PopularMoviesLoading());
-      }
+      emit(const PopularMoviesLoading());
       return;
     }
 

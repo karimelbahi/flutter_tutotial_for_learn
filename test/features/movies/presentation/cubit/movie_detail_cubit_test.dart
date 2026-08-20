@@ -9,6 +9,7 @@ import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/watch
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/movie_detail_cubit.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/movie_detail_state.dart';
 
+import '../../helpers/hive_like_watch_stream.dart';
 import '../../helpers/stub_movie_repository.dart';
 
 const _detail = MovieDetail(
@@ -94,8 +95,12 @@ void main() {
       final cubit = _cubit(
         _FakeMovieRepository(
           watchDetail: (movieId) {
-            if (movieId == 550) return firstController.stream;
-            if (movieId == 807) return secondController.stream;
+            if (movieId == 550) {
+              return hiveLikeWatchStream(null, firstController.stream);
+            }
+            if (movieId == 807) {
+              return hiveLikeWatchStream(null, secondController.stream);
+            }
             return Stream.value(null);
           },
           refreshDetail: (_) async => const Success(null),
@@ -126,6 +131,25 @@ void main() {
 
       expect(cubit.state, isA<MovieDetailSuccess>());
       expect((cubit.state as MovieDetailSuccess).detail.id, 807);
+    });
+
+    test('offline refresh failure still shows cached detail (not raw network error)',
+        () async {
+      final cubit = _cubit(
+        _FakeMovieRepository(
+          watchDetail: (_) => Stream.value(_detail),
+          refreshDetail: (_) async =>
+              const Error<void>(NetworkFailure('Failed host lookup')),
+        ),
+      );
+      addTearDown(cubit.close);
+
+      await cubit.load(550);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(cubit.state, isA<MovieDetailSuccess>());
+      expect(cubit.state, isNot(isA<MovieDetailFailure>()));
+      expect((cubit.state as MovieDetailSuccess).isStale, isTrue);
     });
 
     test('refresh failure without cache emits failure', () async {

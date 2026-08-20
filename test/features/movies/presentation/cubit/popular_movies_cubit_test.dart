@@ -9,6 +9,7 @@ import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/watch
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/popular_movies_cubit.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/popular_movies_state.dart';
 
+import '../../helpers/hive_like_watch_stream.dart';
 import '../../helpers/stub_movie_repository.dart';
 
 const _cachedMovie = Movie(
@@ -72,8 +73,11 @@ void main() {
 
       final cubit = _cubit(
         _FakeMovieRepository(
-          watchPopular: () => controller.stream,
+          watchPopular: () =>
+              hiveLikeWatchStream(const <Movie>[], controller.stream),
           refreshPopular: () async {
+            // Let the watch stream subscribe before simulating Hive write.
+            await Future<void>.delayed(Duration.zero);
             controller.add([_cachedMovie]);
             return const Success(null);
           },

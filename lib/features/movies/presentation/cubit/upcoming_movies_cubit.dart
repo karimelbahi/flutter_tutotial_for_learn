@@ -6,6 +6,7 @@ import '../../domain/entities/movie.dart';
 import '../../domain/usecases/refresh_upcoming_movies.dart';
 import '../../domain/usecases/watch_upcoming_movies.dart';
 import '../utils/error_messages.dart';
+import 'cache_first_load_helper.dart';
 import 'upcoming_movies_state.dart';
 
 /// Loads upcoming movies using **Cache-First SSOT** (same pattern as popular).
@@ -26,8 +27,9 @@ class UpcomingMoviesCubit extends Cubit<UpcomingMoviesState> {
   Future<void> load() async {
     await _subscription?.cancel();
 
-    _subscription = _watchUpcomingMovies().listen(
-      _onMoviesFromCache,
+    _subscription = await subscribeCacheWatch<List<Movie>>(
+      watch: _watchUpcomingMovies(),
+      onData: _onMoviesFromCache,
       onError: (_) {
         if (!_hasCache) {
           emit(UpcomingMoviesFailure(localizedFailureMessage(null)));
@@ -42,9 +44,7 @@ class UpcomingMoviesCubit extends Cubit<UpcomingMoviesState> {
     _hasCache = movies.isNotEmpty;
 
     if (!_hasCache) {
-      if (state is! UpcomingMoviesFailure) {
-        emit(const UpcomingMoviesLoading());
-      }
+      emit(const UpcomingMoviesLoading());
       return;
     }
 

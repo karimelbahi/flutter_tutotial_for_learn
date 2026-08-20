@@ -6,6 +6,7 @@ import '../../domain/entities/movie.dart';
 import '../../domain/usecases/refresh_similar_movies.dart';
 import '../../domain/usecases/watch_similar_movies.dart';
 import '../utils/error_messages.dart';
+import 'cache_first_load_helper.dart';
 import 'similar_movies_state.dart';
 
 /// Loads similar movies row using **Cache-First SSOT**.
@@ -32,8 +33,9 @@ class SimilarMoviesCubit extends Cubit<SimilarMoviesState> {
 
     await _subscription?.cancel();
 
-    _subscription = _watchSimilarMovies(movieId).listen(
-      (movies) => _onSimilarFromCache(movieId, movies),
+    _subscription = await subscribeCacheWatch<List<Movie>>(
+      watch: _watchSimilarMovies(movieId),
+      onData: (movies) => _onSimilarFromCache(movieId, movies),
       onError: (_) {
         if (!_hasCache && movieId == _latestMovieId) {
           emit(
@@ -55,9 +57,7 @@ class SimilarMoviesCubit extends Cubit<SimilarMoviesState> {
     _hasCache = movies.isNotEmpty;
 
     if (!_hasCache) {
-      if (state is! SimilarMoviesFailure) {
-        emit(const SimilarMoviesLoading());
-      }
+      emit(const SimilarMoviesLoading());
       return;
     }
 

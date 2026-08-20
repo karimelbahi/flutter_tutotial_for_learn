@@ -9,6 +9,7 @@ import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/watch
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/similar_movies_cubit.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/similar_movies_state.dart';
 
+import '../../helpers/hive_like_watch_stream.dart';
 import '../../helpers/stub_movie_repository.dart';
 
 const _similar = [
@@ -71,8 +72,10 @@ void main() {
       final cubit = _cubit(
         _FakeMovieRepository(
           watchSimilar: (movieId) {
-            if (movieId == 550) return slowController.stream;
-            return fastController.stream;
+            if (movieId == 550) {
+              return hiveLikeWatchStream(const <Movie>[], slowController.stream);
+            }
+            return hiveLikeWatchStream(const <Movie>[], fastController.stream);
           },
           refreshSimilar: (_) async => const Success(null),
         ),

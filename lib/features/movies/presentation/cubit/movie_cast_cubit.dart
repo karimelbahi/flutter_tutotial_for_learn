@@ -6,6 +6,7 @@ import '../../domain/entities/cast_member.dart';
 import '../../domain/usecases/refresh_movie_cast.dart';
 import '../../domain/usecases/watch_movie_cast.dart';
 import '../utils/error_messages.dart';
+import 'cache_first_load_helper.dart';
 import 'movie_cast_state.dart';
 
 /// Loads cast independently from detail using **Cache-First SSOT**.
@@ -35,8 +36,9 @@ class MovieCastCubit extends Cubit<MovieCastState> {
 
     await _subscription?.cancel();
 
-    _subscription = _watchMovieCast(movieId).listen(
-      (cast) => _onCastFromCache(movieId, cast),
+    _subscription = await subscribeCacheWatch<List<CastMember>>(
+      watch: _watchMovieCast(movieId),
+      onData: (cast) => _onCastFromCache(movieId, cast),
       onError: (_) {
         if (!_hasCache && movieId == _latestMovieId) {
           emit(
@@ -58,9 +60,7 @@ class MovieCastCubit extends Cubit<MovieCastState> {
     _hasCache = cast.isNotEmpty;
 
     if (!_hasCache) {
-      if (state is! MovieCastFailure) {
-        emit(const MovieCastLoading());
-      }
+      emit(const MovieCastLoading());
       return;
     }
 

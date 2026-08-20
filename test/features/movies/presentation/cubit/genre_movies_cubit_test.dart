@@ -8,6 +8,7 @@ import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/watch
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/genre_movies_cubit.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/genre_movies_state.dart';
 
+import '../../helpers/hive_like_watch_stream.dart';
 import '../../helpers/stub_movie_repository.dart';
 
 const _actionGenreId = 28;
@@ -78,8 +79,18 @@ void main() {
       final cubit = _cubit(
         _FakeMovieRepository(
           watchByGenre: (genreId) {
-            if (genreId == _actionGenreId) return actionController.stream;
-            if (genreId == _comedyGenreId) return comedyController.stream;
+            if (genreId == _actionGenreId) {
+              return hiveLikeWatchStream(
+                const <Movie>[],
+                actionController.stream,
+              );
+            }
+            if (genreId == _comedyGenreId) {
+              return hiveLikeWatchStream(
+                const <Movie>[],
+                comedyController.stream,
+              );
+            }
             return Stream.value(const []);
           },
           refreshByGenre: (_) async => const Success(null),

@@ -31,35 +31,44 @@ class MovieDetailModel {
   final List<String> backdropPaths;
 
   factory MovieDetailModel.fromJson(Map<String, dynamic> json) {
-    final images = json['images'] as Map<String, dynamic>?;
+    final images = _readMap(json['images']);
     final backdrops = images?['backdrops'] as List<dynamic>? ?? const [];
 
     return MovieDetailModel(
-      id: json['id'] as int? ?? 0,
+      id: (json['id'] as num?)?.toInt() ?? 0,
       title: json['title'] as String? ?? '',
       overview: json['overview'] as String?,
       posterPath: json['poster_path'] as String?,
       releaseDate: json['release_date'] as String?,
-      runtime: json['runtime'] as int?,
+      runtime: (json['runtime'] as num?)?.toInt(),
       voteAverage: (json['vote_average'] as num?)?.toDouble() ?? 0.0,
-      revenue: json['revenue'] as int? ?? 0,
+      revenue: (json['revenue'] as num?)?.toInt() ?? 0,
       status: json['status'] as String? ?? '',
       homepage: json['homepage'] as String?,
       genres: (json['genres'] as List<dynamic>?)
-              ?.map(
-                (item) => MovieDetailGenre(
-                  id: (item as Map<String, dynamic>)['id'] as int? ?? 0,
-                  name: item['name'] as String? ?? '',
-                ),
-              )
+              ?.map((item) {
+                final genre = _readMap(item);
+                if (genre == null) return null;
+                return MovieDetailGenre(
+                  id: (genre['id'] as num?)?.toInt() ?? 0,
+                  name: genre['name'] as String? ?? '',
+                );
+              })
+              .whereType<MovieDetailGenre>()
               .toList() ??
           const [],
       backdropPaths: backdrops
-          .map((item) => (item as Map<String, dynamic>)['file_path'] as String?)
+          .map((item) => _readMap(item)?['file_path'] as String?)
           .whereType<String>()
           .where((path) => path.isNotEmpty)
           .toList(),
     );
+  }
+
+  /// Hive reloads nested JSON as [Map<dynamic, dynamic>] — normalize safely.
+  static Map<String, dynamic>? _readMap(Object? value) {
+    if (value is! Map) return null;
+    return Map<String, dynamic>.from(value);
   }
 
   /// Round-trip format for Hive — keeps the shape [fromJson] expects.

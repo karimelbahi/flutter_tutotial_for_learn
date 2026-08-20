@@ -6,6 +6,7 @@ import '../../domain/entities/movie.dart';
 import '../../domain/usecases/refresh_top_rated_movies.dart';
 import '../../domain/usecases/watch_top_rated_movies.dart';
 import '../utils/error_messages.dart';
+import 'cache_first_load_helper.dart';
 import 'top_rated_movies_state.dart';
 
 /// Loads top-rated movies using the same **Cache-First SSOT** pattern as
@@ -27,8 +28,9 @@ class TopRatedMoviesCubit extends Cubit<TopRatedMoviesState> {
   Future<void> load() async {
     await _subscription?.cancel();
 
-    _subscription = _watchTopRatedMovies().listen(
-      _onMoviesFromCache,
+    _subscription = await subscribeCacheWatch<List<Movie>>(
+      watch: _watchTopRatedMovies(),
+      onData: _onMoviesFromCache,
       onError: (_) {
         if (!_hasCache) {
           emit(TopRatedMoviesFailure(localizedFailureMessage(null)));
@@ -43,9 +45,7 @@ class TopRatedMoviesCubit extends Cubit<TopRatedMoviesState> {
     _hasCache = movies.isNotEmpty;
 
     if (!_hasCache) {
-      if (state is! TopRatedMoviesFailure) {
-        emit(const TopRatedMoviesLoading());
-      }
+      emit(const TopRatedMoviesLoading());
       return;
     }
 

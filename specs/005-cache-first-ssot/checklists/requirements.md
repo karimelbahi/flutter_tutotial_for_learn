@@ -23,4 +23,4 @@
 - [x] Constitution Principle VI defined
 - [x] Plan maps to existing Clean Architecture + Cubit stack
 - [x] Tasks ordered for sequential commit/push loop
-- [ ] **User approval received** — required before T006
+- [x] **User approval received** — required before T006

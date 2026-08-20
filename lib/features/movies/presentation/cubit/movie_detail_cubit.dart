@@ -6,6 +6,7 @@ import '../../domain/entities/movie_detail.dart';
 import '../../domain/usecases/refresh_movie_detail.dart';
 import '../../domain/usecases/watch_movie_detail.dart';
 import '../utils/error_messages.dart';
+import 'cache_first_load_helper.dart';
 import 'movie_detail_state.dart';
 
 /// Loads movie detail using **Cache-First SSOT**.
@@ -36,8 +37,10 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
 
     await _subscription?.cancel();
 
-    _subscription = _watchMovieDetail(movieId).listen(
-      (detail) => _onDetailFromCache(movieId, detail),
+    // Wait for Hive's first snapshot before refresh — avoids offline false errors.
+    _subscription = await subscribeCacheWatch<MovieDetail?>(
+      watch: _watchMovieDetail(movieId),
+      onData: (detail) => _onDetailFromCache(movieId, detail),
       onError: (_) {
         if (!_hasCache && movieId == _latestMovieId) {
           emit(
@@ -59,9 +62,7 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
     _hasCache = detail != null;
 
     if (!_hasCache) {
-      if (state is! MovieDetailFailure) {
-        emit(const MovieDetailLoading());
-      }
+      emit(const MovieDetailLoading());
       return;
     }
 

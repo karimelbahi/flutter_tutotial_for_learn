@@ -6,6 +6,7 @@ import '../../domain/entities/movie.dart';
 import '../../domain/usecases/refresh_genre_movies.dart';
 import '../../domain/usecases/watch_genre_movies.dart';
 import '../utils/error_messages.dart';
+import 'cache_first_load_helper.dart';
 import 'genre_movies_state.dart';
 
 /// Loads movies for the selected genre tab using **Cache-First SSOT**.
@@ -45,9 +46,10 @@ class GenreMoviesCubit extends Cubit<GenreMoviesState> {
 
     await _subscription?.cancel();
 
-    // Listen to THIS genre's cache slice only.
-    _subscription = _watchGenreMovies(genreId).listen(
-      (movies) => _onMoviesFromCache(genreId, movies),
+    // Listen to THIS genre's cache slice only — wait for first snapshot first.
+    _subscription = await subscribeCacheWatch<List<Movie>>(
+      watch: _watchGenreMovies(genreId),
+      onData: (movies) => _onMoviesFromCache(genreId, movies),
       onError: (_) {
         if (!_hasCache && genreId == _latestGenreId) {
           emit(
@@ -70,9 +72,7 @@ class GenreMoviesCubit extends Cubit<GenreMoviesState> {
     _hasCache = movies.isNotEmpty;
 
     if (!_hasCache) {
-      if (state is! GenreMoviesFailure) {
-        emit(GenreMoviesLoading(genreId: genreId));
-      }
+      emit(GenreMoviesLoading(genreId: genreId));
       return;
     }
 
