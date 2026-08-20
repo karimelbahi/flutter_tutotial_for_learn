@@ -13,12 +13,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.showSearchButton = true,
+    this.showLogoLeading = true,
     this.onSearchPressed,
     this.onSettingsPressed,
   });
 
   final String title;
   final bool showSearchButton;
+  /// When `false`, shows the system back button instead of the home logo.
+  final bool showLogoLeading;
   final VoidCallback? onSearchPressed;
   final VoidCallback? onSettingsPressed;
 
@@ -30,7 +33,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(title),
       elevation: 0,
-      leading: const Icon(Icons.motion_photos_on_rounded),
+      automaticallyImplyLeading: !showLogoLeading,
+      leading: showLogoLeading
+          ? const Icon(Icons.motion_photos_on_rounded)
+          : null,
       actions: [
         if (showSearchButton)
           IconButton(

@@ -65,6 +65,7 @@ class _MovieDetailView extends StatelessWidget {
       appBar: CustomAppBar(
         title: 'detail.title'.tr(),
         showSearchButton: false,
+        showLogoLeading: false,
       ),
       body: BlocBuilder<MovieDetailCubit, MovieDetailState>(
         builder: (context, state) {
