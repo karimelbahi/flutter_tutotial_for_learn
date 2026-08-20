@@ -1,39 +1,73 @@
-# flutter_tutotial_for_learn
+# Movie DB
 
-A Flutter movie app inspired by [flutter-tmdbmovie-bloc-cubit](https://github.com/ihsaninh/flutter-tmdbmovie-bloc-cubit). Built step by step with **Clean Architecture (Feature-First)**, Cubit, Retrofit, easy_localization (en/ar), and TMDB API — matching the reference app's design and features.
+A Flutter TMDB movie app built for learning **Clean Architecture (feature-first)**, **Cubit** state management, **Retrofit**, and **easy_localization** (English / Arabic).
 
-## Documentation
+Inspired by [flutter-tmdbmovie-bloc-cubit](https://github.com/ihsaninh/flutter-tmdbmovie-bloc-cubit) — same dark cinematic UI, rebuilt layer by layer with specs and one-commit-per-step workflow.
 
-| Resource | Path |
-|----------|------|
-| Architecture guide | [docs/architecture.md](docs/architecture.md) |
-| Folder structure | [docs/folder-structure.md](docs/folder-structure.md) |
-| Tech stack | [docs/tech-stack.md](docs/tech-stack.md) |
-| Development workflow | [docs/development-workflow.md](docs/development-workflow.md) |
-| Boilerplate templates | [docs/boilerplate-templates.md](docs/boilerplate-templates.md) |
+## Features
 
-### Cursor AI (skill + rules)
+- **Home** — popular carousel, genre tabs, top rated & upcoming rows
+- **Search** — debounced TMDB search with loading, empty, and error states
+- **Detail** — backdrop carousel, poster, genres, overview, stats, cast, similar movies
+- **Navigation** — Home → Search → Detail → Similar → Detail with back stack
+- **i18n** — English & Arabic UI; locale switcher in settings
+- **Clean Architecture** — domain use cases, Retrofit data layer, Cubit presentation
 
-- **Skill:** `.cursor/skills/flutter-movie-app/SKILL.md` — agent workflow for this project
-- **Rules:** `.cursor/rules/` — Clean Architecture conventions applied automatically
+## Screenshots
 
-## Getting Started
+### Home
+
+Popular carousel, genre discovery, and movie rows.
+
+<p align="center">
+  <img src="IMG/Screenshot_1787212182.png" alt="Home screen with carousel and genre tabs" width="280" />
+  <img src="IMG/Screenshot_1787212604.png" alt="Home screen top rated and upcoming sections" width="280" />
+</p>
+
+### Search
+
+Filled search bar with debounced results.
+
+<p align="center">
+  <img src="IMG/Screenshot_1787213388.png" alt="Search results list" width="280" />
+</p>
+
+### Movie detail
+
+Full detail layout with stats, cast, and similar movies.
+
+<p align="center">
+  <img src="IMG/Screenshot_1787213410.png" alt="Movie detail header and overview" width="280" />
+  <img src="IMG/Screenshot_1787213416.png" alt="Movie detail cast and similar movies" width="280" />
+</p>
+
+### Settings (locale)
+
+Switch between English and Arabic from the settings sheet.
+
+<p align="center">
+  <img src="IMG/Screenshot_1787213421.png" alt="Settings language picker" width="280" />
+</p>
+
+## Getting started
 
 ### Prerequisites
 
-- [Flutter](https://docs.flutter.dev/get-started/install)
+- [Flutter](https://docs.flutter.dev/get-started/install) (Dart 3.13+)
 - A free [TMDB API key](https://www.themoviedb.org/settings/api)
 
 ### Setup
 
-1. Clone the repository
-2. Copy the env template and add your API key:
-
 ```bash
+git clone https://github.com/karimelbahi/flutter_tutotial_for_learn.git
+cd flutter_tutotial_for_learn
 cp .env.example .env
+# Edit .env and set API_KEY=your_tmdb_api_key
+flutter pub get
+flutter run
 ```
 
-3. Edit `.env`:
+`.env` example:
 
 ```env
 API_KEY=your_tmdb_api_key_here
@@ -41,186 +75,149 @@ BASE_URL=https://api.themoviedb.org/3
 IMAGE_URL=https://image.tmdb.org/t/p/w500
 ```
 
-4. Install dependencies and run:
+> **Note:** `.env` is gitignored. Never commit your API key.
+
+### Code generation (after API changes)
 
 ```bash
-flutter pub get
-flutter run
+dart run build_runner build
 ```
 
-> **Note:** `.env` is gitignored. Never commit your API key.
+### Tests
+
+```bash
+dart analyze lib/
+flutter test
+```
 
 ---
 
-## Startup Flow: From `main()` to the Home Screen
+## Architecture
 
-When you run the app, this is what happens:
+```
+presentation  →  domain  ←  data
+     ↓              ↑
+   core (theme, routes, network, tokens)
+```
+
+| Layer | Path | Role |
+|-------|------|------|
+| **Presentation** | `lib/features/movies/presentation/` | Screens, widgets, Cubits |
+| **Domain** | `lib/features/movies/domain/` | Entities, repository contracts, use cases |
+| **Data** | `lib/features/movies/data/` | Retrofit `TmdbApi`, models, repository impl |
+| **Core** | `lib/core/` | Theme, design tokens, Dio, config |
+
+### Data flow
+
+```
+Screen → Cubit → UseCase → Repository → DataSource → TmdbApi (Retrofit)
+                              ↓
+                         Movie entity
+```
+
+### App startup
 
 ```
 main.dart
-  → MovieApp.initialize()     (Flutter binding, portrait lock)
-  → dotenv.load('.env')       (load TMDB API key + URLs)
-  → DioFactory.configure()    (shared Dio HTTP engine)
-  → TmdbApiProvider.configure() (Retrofit TMDB client)
-  → runApp(MovieApp)
-      → MaterialApp
-          → theme: AppTheme.dark
-          → home: MovieHomeScreen   (first screen)
+  → MovieApp.initialize()
+  → dotenv.load('.env')
+  → DioFactory.configure()
+  → TmdbApiProvider.configure()
+  → runApp(EasyLocalization → MovieApp)
+      → MaterialApp (AppRouter)
+          → MovieHomeScreen
 ```
-
-### Step 1 — `main.dart` (entry point)
-
-```dart
-Future<void> main() async {
-  await MovieApp.initialize();
-  await dotenv.load(fileName: '.env');
-  DioFactory.instance.configure();
-  TmdbApiProvider.instance.configure();
-  runApp(const MovieApp());
-}
-```
-
-Three things happen before any UI appears:
-
-1. **`MovieApp.initialize()`** — prepares Flutter (binding, portrait-only lock)
-2. **`dotenv.load('.env')`** — loads your TMDB API key and URLs from the local `.env` file
-3. **`DioFactory` + `TmdbApiProvider`** — configure shared HTTP (Dio) and typed Retrofit API client
-4. **`runApp(const MovieApp())`** — starts the widget tree
-
-### Step 2 — `MovieApp` (root widget)
-
-`MaterialApp` is the app container. It sets:
-
-- **Theme** → `AppTheme.dark` (dark background `#1D1D27`, white text, tab styles)
-- **Home screen** → `MovieHomeScreen()` — the first screen the user sees
-
-There is no router yet; `home:` points directly to the first screen.
-
-### Step 3 — `MovieHomeScreen` (first screen)
-
-The home screen uses **design tokens** instead of hardcoded values:
-
-| UI element | Token used |
-|------------|------------|
-| Background | `AppTheme.dark` → `AppColors.primary` |
-| Title "Movie DB" | `AppTypography.detailTitle` (28px, light weight) |
-| Subtitle text | `AppTypography.detailOverview` (white70) |
-| Poster card size | 120×180 (`AppSpacing.moviePosterWidth/Height`) |
-| Card color | `AppColors.martinique` |
-| Card border | `AppColors.divider` |
-| Placeholder icon | `AppColors.placeholder` |
-
-Currently this is a **placeholder** screen that shows the look and feel. Next steps will replace the center content with real movie data (carousel, lists, genre tabs).
 
 ---
 
-## Full App Workflow
+## Tech stack
 
-### Planned architecture
-
-| Layer | Folder | Role |
-|-------|--------|------|
-| **Entry** | `lib/main.dart` | Boot app, load secrets |
-| **App shell** | `lib/app/` | Theme, routing, global setup |
-| **Screens** | `lib/screens/` | One folder per screen (UI only) |
-| **State** | `lib/blocs/` *(next)* | Cubits manage loading/success/error |
-| **Data** | `lib/features/movies/data/` | Retrofit API + datasources + repository impl |
-| **Models** | `lib/models/` *(next)* | Parse JSON from TMDB |
-| **Design** | `lib/core/` | Colors, spacing, typography, theme |
-| **Config** | `lib/core/config/` | API URLs using `.env` keys |
-
-### Data flow (Step 1+)
-
-```
-User opens app
-  → MovieHomeScreen builds
-  → PopularMoviesCubit.load()
-  → GetPopularMoviesUseCase.call()
-  → MovieRepositoryImpl → MovieRemoteDataSource
-  → TmdbApi.getPopularMovies()   [Retrofit]
-  → MovieModel → Movie entity
-  → Cubit emits Success
-  → BlocBuilder rebuilds UI with carousel + cards
-```
-
-### Planned screens
-
-| Screen | Features |
-|--------|----------|
-| **Home** | Popular carousel, genre tabs, top-rated row, upcoming row |
-| **Search** | Debounced movie search |
-| **Detail** | Backdrop carousel, poster, genres, overview, cast, similar movies |
+| Concern | Library |
+|---------|---------|
+| State | `flutter_bloc` (Cubit only) |
+| i18n | `easy_localization` |
+| HTTP | `retrofit` + `dio` |
+| Env | `flutter_dotenv` |
+| UI | `carousel_slider`, `flutter_rating_bar`, `url_launcher` |
 
 ---
 
-## Project Structure
+## Project structure
 
 ```
 lib/
-├── main.dart                 ← starts everything (DioFactory + TmdbApiProvider)
+├── main.dart
 ├── app/
-│   └── app.dart              ← MaterialApp + theme
+│   ├── app.dart
+│   └── app_router.dart
 ├── core/
-│   ├── config/app_config.dart    ← TMDB URLs (uses .env)
-│   ├── constants/                ← design tokens
-│   ├── network/dio_factory.dart  ← shared Dio (Retrofit engine)
-│   └── theme/app_theme.dart      ← dark theme
+│   ├── config/
+│   ├── constants/      # AppColors, AppSpacing, AppTypography
+│   ├── network/
+│   └── theme/
 └── features/movies/
-    ├── data/api/tmdb_api.dart    ← Retrofit TMDB endpoints
-    ├── data/datasources/         ← calls TmdbApi
-    └── domain/                   ← entities, repos, use cases
+    ├── data/
+    │   ├── api/tmdb_api.dart
+    │   ├── datasources/
+    │   ├── models/
+    │   └── repositories/
+    ├── domain/
+    │   ├── entities/
+    │   ├── repositories/
+    │   └── usecases/
+    └── presentation/
+        ├── cubit/
+        ├── screens/
+        └── widgets/
 ```
 
 ---
 
-## Design Tokens
+## Feature specs
 
-Matched to the reference TMDB movie app.
+| Spec | Feature | Status |
+|------|---------|--------|
+| [001-movie-home](specs/001-movie-home/spec.md) | Home feed | Complete |
+| [002-movie-search](specs/002-movie-search/spec.md) | Search screen | Complete |
+| [003-movie-detail](specs/003-movie-detail/spec.md) | Movie detail | Complete |
+| [004-navigation-polish](specs/004-navigation-polish/spec.md) | Navigation & i18n polish | Complete |
 
-### Colors
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `primary` | `#1D1D27` | Scaffold / app background |
-| `martinique` | `#2D2D33` | Popup menus, cards |
-| `amethystSmoke` | `#9E9EBC` | Secondary text |
-| `mandy` | `#E15050` | Accent |
-
-### Typography
-
-- Carousel title: 18, bold, white
-- Section headers: 14, w600, white70
-- Movie card title: 13, bold, white
-- Detail title: 28, w300, white
-- Body/overview: white70, line height 1.4
-
-### Layout
-
-- Movie poster: **120 × 180**, radius **2**
-- Carousel height: **220**
-- Horizontal lists: height **250**
-- Section padding: **12–16**
+See [docs/implementation-plan.md](docs/implementation-plan.md) for the full phase roadmap.
 
 ---
 
-## Roadmap
+## Documentation
 
-| Step | Status | What we build |
-|------|--------|----------------|
-| 1 | Done | Project setup, dependencies, `.env` |
-| 2 | Done | Design tokens + app shell + home placeholder |
-| 3 | In progress | Retrofit API + domain/data layers (Step 0–1) |
-| 4 | | Home screen — popular carousel + sections |
-| 5 | | Movie cards + top-rated / upcoming rows |
-| 6 | | Genre tabs + filtered lists |
-| 7 | | Search screen with debounce |
-| 8 | | Movie detail — backdrop, cast, similar movies |
-| 9 | | Navigation + polish |
+| Resource | Path |
+|----------|------|
+| Implementation plan | [docs/implementation-plan.md](docs/implementation-plan.md) |
+| Architecture | [docs/architecture.md](docs/architecture.md) |
+| Folder structure | [docs/folder-structure.md](docs/folder-structure.md) |
+| Tech stack | [docs/tech-stack.md](docs/tech-stack.md) |
+| Development workflow | [docs/development-workflow.md](docs/development-workflow.md) |
+
+### Cursor AI
+
+- **Skill:** `.cursor/skills/flutter-movie-app/SKILL.md`
+- **Rules:** `.cursor/rules/flutter-clean-architecture.mdc`
+
+---
+
+## Design tokens
+
+Dark TMDB-style theme (`#1D1D27` background).
+
+| Token | Usage |
+|-------|--------|
+| `AppColors.primary` | Scaffold background |
+| `AppColors.martinique` | Cards, search bar, menus |
+| `AppSpacing.moviePosterWidth/Height` | 120 × 180 posters |
+| `AppSpacing.carouselHeight` | 220px carousel |
 
 ---
 
 ## Resources
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Flutter documentation](https://docs.flutter.dev/)
-- [TMDB API docs](https://developer.themoviedb.org/docs)
+- [Flutter docs](https://docs.flutter.dev/)
+- [TMDB API](https://developer.themoviedb.org/docs)
+- [Reference app](https://github.com/ihsaninh/flutter-tmdbmovie-bloc-cubit)
