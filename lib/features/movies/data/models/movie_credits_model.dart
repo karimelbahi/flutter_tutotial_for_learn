@@ -18,6 +18,10 @@ class MovieCreditsModel {
   List<CastMember> toEntities() {
     return cast.map((model) => model.toEntity()).toList();
   }
+
+  Map<String, dynamic> toJson() => {
+        'cast': cast.map((member) => member.toJson()).toList(),
+      };
 }
 
 class CastMemberModel {
@@ -50,4 +54,11 @@ class CastMemberModel {
       profilePath: profilePath,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'character': character,
+        'profile_path': profilePath,
+      };
 }

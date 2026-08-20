@@ -62,6 +62,28 @@ class MovieDetailModel {
     );
   }
 
+  /// Round-trip format for Hive — keeps the shape [fromJson] expects.
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'overview': overview,
+        'poster_path': posterPath,
+        'release_date': releaseDate,
+        'runtime': runtime,
+        'vote_average': voteAverage,
+        'revenue': revenue,
+        'status': status,
+        'homepage': homepage,
+        'genres': genres
+            .map((genre) => {'id': genre.id, 'name': genre.name})
+            .toList(),
+        'images': {
+          'backdrops': backdropPaths
+              .map((path) => {'file_path': path})
+              .toList(),
+        },
+      };
+
   MovieDetail toEntity() {
     return MovieDetail(
       id: id,

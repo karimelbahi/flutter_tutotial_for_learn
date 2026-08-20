@@ -42,6 +42,20 @@ class MovieModel {
     );
   }
 
+  /// Serializes this model for Hive storage.
+  ///
+  /// We mirror TMDB field names so [fromJson] can decode cached rows later.
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'poster_path': posterPath,
+        'backdrop_path': backdropPath,
+        'vote_average': voteAverage,
+        'release_date': releaseDate,
+        'overview': overview,
+        'genre_ids': genreIds,
+      };
+
   /// Maps data model → domain entity ( strips JSON concerns ).
   Movie toEntity() {
     return Movie(

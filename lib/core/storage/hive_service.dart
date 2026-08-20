@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Bootstraps Hive and exposes opened boxes to the data layer.
@@ -47,15 +50,43 @@ class HiveService {
 
     // We use `dynamic` values (JSON-like maps/lists) in v1 — no code-generated
     // Hive adapters yet. LocalDataSource will encode/decode models manually.
-    await Future.wait([
+    await _openBoxes();
+
+    _isInitialized = true;
+  }
+
+  /// Initializes Hive in a temp folder — use in unit tests only.
+  ///
+  /// Production code should call [init] (uses `initFlutter` + persistent path).
+  @visibleForTesting
+  Future<void> initForTest({String? directoryPath}) async {
+    if (_isInitialized) {
+      await closeForTest();
+    }
+
+    final path =
+        directoryPath ?? Directory.systemTemp.createTempSync('hive_test').path;
+    Hive.init(path);
+    await _openBoxes();
+    _isInitialized = true;
+  }
+
+  /// Closes all boxes so the next test gets a clean Hive instance.
+  @visibleForTesting
+  Future<void> closeForTest() async {
+    if (!_isInitialized) return;
+    await Hive.close();
+    _isInitialized = false;
+  }
+
+  Future<void> _openBoxes() {
+    return Future.wait([
       Hive.openBox<dynamic>(_moviesListsBox),
       Hive.openBox<dynamic>(_movieDetailsBox),
       Hive.openBox<dynamic>(_movieCastBox),
       Hive.openBox<dynamic>(_similarMoviesBox),
       Hive.openBox<dynamic>(_cacheMetadataBox),
     ]);
-
-    _isInitialized = true;
   }
 
   void _ensureInitialized() {
