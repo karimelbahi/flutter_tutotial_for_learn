@@ -20,7 +20,20 @@
   "detail": {
     "title": "Movie Detail",
     "placeholder": "Full detail screen is planned for spec 003-movie-detail.",
-    "movie_id": "Movie ID: {}"
+    "movie_id": "Movie ID: {}",
+    "more_options": "More options",
+    "share": "Share",
+    "visit_website": "Visit Website",
+    "overview_empty": "No overview available.",
+    "rating": "Rating",
+    "revenue": "Revenue",
+    "revenue_empty": "USD -",
+    "status": "Status",
+    "cast_title": "Popular Casts",
+    "cast_subtitle": "See All",
+    "similar_title": "Similar Movies",
+    "similar_subtitle": "See All",
+    "error": "Could not load movie details."
   },
   "common": {
     "back": "Back",

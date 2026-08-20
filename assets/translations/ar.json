@@ -20,7 +20,20 @@
   "detail": {
     "title": "تفاصيل الفيلم",
     "placeholder": "شاشة التفاصيل الكاملة مخططة في spec 003-movie-detail.",
-    "movie_id": "معرف الفيلم: {}"
+    "movie_id": "معرف الفيلم: {}",
+    "more_options": "المزيد من الخيارات",
+    "share": "مشاركة",
+    "visit_website": "زيارة الموقع",
+    "overview_empty": "لا يوجد ملخص متاح.",
+    "rating": "التقييم",
+    "revenue": "الإيرادات",
+    "revenue_empty": "USD -",
+    "status": "الحالة",
+    "cast_title": "طاقم التمثيل",
+    "cast_subtitle": "عرض الكل",
+    "similar_title": "أفلام مشابهة",
+    "similar_subtitle": "عرض الكل",
+    "error": "تعذر تحميل تفاصيل الفيلم."
   },
   "common": {
     "back": "رجوع",
