@@ -16,6 +16,18 @@ abstract class MovieRepository {
   /// Fetches from TMDB and writes to local cache. Does not return UI data directly.
   Future<Result<void>> refreshPopularMovies();
 
+  Stream<List<Movie>> watchTopRatedMovies();
+
+  Future<Result<void>> refreshTopRatedMovies();
+
+  Stream<List<Movie>> watchUpcomingMovies();
+
+  Future<Result<void>> refreshUpcomingMovies();
+
+  Stream<List<Movie>> watchMoviesByGenre(int genreId);
+
+  Future<Result<void>> refreshMoviesByGenre(int genreId);
+
   Future<Result<List<Movie>>> getPopularMovies();
 
   Future<Result<List<Movie>>> getMoviesByGenre(int genreId);

@@ -4,13 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tutotial_for_learn/core/errors/failures.dart';
 import 'package:flutter_tutotial_for_learn/core/utils/debouncer.dart';
 import 'package:flutter_tutotial_for_learn/core/utils/result.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/cast_member.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/movie.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/movie_detail.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/repositories/movie_repository.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/search_movies.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/search_movies_cubit.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/search_movies_state.dart';
+
+import '../../helpers/stub_movie_repository.dart';
 
 const _batman = Movie(
   id: 268,
@@ -20,47 +19,13 @@ const _batman = Movie(
   releaseDate: '1989-06-23',
 );
 
-class _FakeMovieRepository implements MovieRepository {
+class _FakeMovieRepository extends StubMovieRepository {
   _FakeMovieRepository({required this.onSearch});
 
   final Future<Result<List<Movie>>> Function(String query) onSearch;
 
   @override
-  Future<Result<List<Movie>>> getPopularMovies() =>
-      throw UnimplementedError();
-
-  @override
-  Stream<List<Movie>> watchPopularMovies() => throw UnimplementedError();
-
-  @override
-  Future<Result<void>> refreshPopularMovies() => throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getMoviesByGenre(int genreId) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getTopRatedMovies() =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getUpcomingMovies() =>
-      throw UnimplementedError();
-
-  @override
   Future<Result<List<Movie>>> searchMovies(String query) => onSearch(query);
-
-  @override
-  Future<Result<MovieDetail>> getMovieDetail(int movieId) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<CastMember>>> getMovieCast(int movieId) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getSimilarMovies(int movieId) =>
-      throw UnimplementedError();
 }
 
 SearchMoviesCubit _cubit(Future<Result<List<Movie>>> Function(String) handler) {

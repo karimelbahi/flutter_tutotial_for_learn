@@ -48,6 +48,51 @@ class MovieRepositoryImpl implements MovieRepository {
     });
   }
 
+  // ── Cache-First: Top rated ────────────────────────────────────────────────
+
+  @override
+  Stream<List<Movie>> watchTopRatedMovies() {
+    return _localDataSource.watchTopRatedMovies().map(_mapMovieModels);
+  }
+
+  @override
+  Future<Result<void>> refreshTopRatedMovies() {
+    return _refreshMovieList(_remoteDataSource.fetchTopRatedMovies, (models) {
+      return _localDataSource.saveTopRatedMovies(models);
+    });
+  }
+
+  // ── Cache-First: Upcoming ─────────────────────────────────────────────────
+
+  @override
+  Stream<List<Movie>> watchUpcomingMovies() {
+    return _localDataSource.watchUpcomingMovies().map(_mapMovieModels);
+  }
+
+  @override
+  Future<Result<void>> refreshUpcomingMovies() {
+    return _refreshMovieList(_remoteDataSource.fetchUpcomingMovies, (models) {
+      return _localDataSource.saveUpcomingMovies(models);
+    });
+  }
+
+  // ── Cache-First: Genre tabs (one cache key per genre id) ──────────────────
+
+  @override
+  Stream<List<Movie>> watchMoviesByGenre(int genreId) {
+    return _localDataSource
+        .watchMoviesByGenre(genreId)
+        .map(_mapMovieModels);
+  }
+
+  @override
+  Future<Result<void>> refreshMoviesByGenre(int genreId) {
+    return _refreshMovieList(
+      () => _remoteDataSource.fetchMoviesByGenre(genreId),
+      (models) => _localDataSource.saveMoviesByGenre(genreId, models),
+    );
+  }
+
   // ── Legacy one-shot APIs (remote-only until cubit migration) ─────────────
 
   @override

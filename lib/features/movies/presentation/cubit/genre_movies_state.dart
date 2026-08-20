@@ -24,12 +24,16 @@ final class GenreMoviesSuccess extends GenreMoviesState {
   const GenreMoviesSuccess({
     required super.genreId,
     required this.movies,
+    this.isStale = false,
+    this.isRefreshing = false,
   });
 
   final List<Movie> movies;
+  final bool isStale;
+  final bool isRefreshing;
 
   @override
-  List<Object?> get props => [genreId, movies];
+  List<Object?> get props => [genreId, movies, isStale, isRefreshing];
 }
 
 final class GenreMoviesFailure extends GenreMoviesState {

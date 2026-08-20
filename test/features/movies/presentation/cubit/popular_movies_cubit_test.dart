@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tutotial_for_learn/core/errors/failures.dart';
 import 'package:flutter_tutotial_for_learn/core/utils/result.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/cast_member.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/movie.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/movie_detail.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/repositories/movie_repository.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/refresh_popular_movies.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/watch_popular_movies.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/popular_movies_cubit.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/popular_movies_state.dart';
+
+import '../../helpers/stub_movie_repository.dart';
 
 const _cachedMovie = Movie(
   id: 550,
@@ -18,50 +17,20 @@ const _cachedMovie = Movie(
   voteAverage: 8.4,
 );
 
-class _FakeMovieRepository implements MovieRepository {
+class _FakeMovieRepository extends StubMovieRepository {
   _FakeMovieRepository({
-    required Stream<List<Movie>> Function() watchPopular,
-    required Future<Result<void>> Function() refreshPopular,
-  })  : _watchPopular = watchPopular,
-        _refreshPopular = refreshPopular;
+    required this.watchPopular,
+    required this.refreshPopular,
+  });
 
-  final Stream<List<Movie>> Function() _watchPopular;
-  final Future<Result<void>> Function() _refreshPopular;
-
-  @override
-  Stream<List<Movie>> watchPopularMovies() => _watchPopular();
+  final Stream<List<Movie>> Function() watchPopular;
+  final Future<Result<void>> Function() refreshPopular;
 
   @override
-  Future<Result<void>> refreshPopularMovies() => _refreshPopular();
+  Stream<List<Movie>> watchPopularMovies() => watchPopular();
 
   @override
-  Future<Result<List<Movie>>> getPopularMovies() => throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getMoviesByGenre(int genreId) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getTopRatedMovies() => throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getUpcomingMovies() => throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> searchMovies(String query) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<MovieDetail>> getMovieDetail(int movieId) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<CastMember>>> getMovieCast(int movieId) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getSimilarMovies(int movieId) =>
-      throw UnimplementedError();
+  Future<Result<void>> refreshPopularMovies() => refreshPopular();
 }
 
 PopularMoviesCubit _cubit(_FakeMovieRepository repository) {

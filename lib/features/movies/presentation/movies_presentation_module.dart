@@ -2,15 +2,18 @@ import '../data/datasources/movie_local_data_source.dart';
 import '../data/datasources/movie_remote_data_source.dart';
 import '../data/repositories/movie_repository_impl.dart';
 import '../domain/entities/genre.dart';
-import '../domain/usecases/get_genre_movies.dart';
 import '../domain/usecases/get_movie_cast.dart';
 import '../domain/usecases/get_movie_detail.dart';
 import '../domain/usecases/get_similar_movies.dart';
-import '../domain/usecases/get_top_rated_movies.dart';
-import '../domain/usecases/get_upcoming_movies.dart';
+import '../domain/usecases/refresh_genre_movies.dart';
 import '../domain/usecases/refresh_popular_movies.dart';
+import '../domain/usecases/refresh_top_rated_movies.dart';
+import '../domain/usecases/refresh_upcoming_movies.dart';
 import '../domain/usecases/search_movies.dart';
+import '../domain/usecases/watch_genre_movies.dart';
 import '../domain/usecases/watch_popular_movies.dart';
+import '../domain/usecases/watch_top_rated_movies.dart';
+import '../domain/usecases/watch_upcoming_movies.dart';
 import 'cubit/genre_movies_cubit.dart';
 import 'cubit/movie_cast_cubit.dart';
 import 'cubit/movie_detail_cubit.dart';
@@ -42,19 +45,26 @@ GenreMoviesCubit createGenreMoviesCubit() {
   final repository = _sharedMovieRepository();
   final initialGenreId = kMovieGenres.first.id;
   return GenreMoviesCubit(
-    GetGenreMovies(repository),
+    WatchGenreMovies(repository),
+    RefreshGenreMovies(repository),
     initialGenreId: initialGenreId,
   )..load(initialGenreId);
 }
 
 TopRatedMoviesCubit createTopRatedMoviesCubit() {
   final repository = _sharedMovieRepository();
-  return TopRatedMoviesCubit(GetTopRatedMovies(repository));
+  return TopRatedMoviesCubit(
+    WatchTopRatedMovies(repository),
+    RefreshTopRatedMovies(repository),
+  );
 }
 
 UpcomingMoviesCubit createUpcomingMoviesCubit() {
   final repository = _sharedMovieRepository();
-  return UpcomingMoviesCubit(GetUpcomingMovies(repository));
+  return UpcomingMoviesCubit(
+    WatchUpcomingMovies(repository),
+    RefreshUpcomingMovies(repository),
+  );
 }
 
 SearchMoviesCubit createSearchMoviesCubit() {

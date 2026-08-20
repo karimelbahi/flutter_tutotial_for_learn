@@ -19,12 +19,18 @@ final class UpcomingMoviesLoading extends UpcomingMoviesState {
 }
 
 final class UpcomingMoviesSuccess extends UpcomingMoviesState {
-  const UpcomingMoviesSuccess(this.movies);
+  const UpcomingMoviesSuccess(
+    this.movies, {
+    this.isStale = false,
+    this.isRefreshing = false,
+  });
 
   final List<Movie> movies;
+  final bool isStale;
+  final bool isRefreshing;
 
   @override
-  List<Object?> get props => [movies];
+  List<Object?> get props => [movies, isStale, isRefreshing];
 }
 
 final class UpcomingMoviesFailure extends UpcomingMoviesState {

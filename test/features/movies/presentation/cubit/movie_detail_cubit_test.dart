@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tutotial_for_learn/core/errors/failures.dart';
 import 'package:flutter_tutotial_for_learn/core/utils/result.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/cast_member.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/movie.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/movie_detail.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/repositories/movie_repository.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/get_movie_detail.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/movie_detail_cubit.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/movie_detail_state.dart';
+
+import '../../helpers/stub_movie_repository.dart';
 
 const _detail = MovieDetail(
   id: 550,
@@ -21,7 +20,7 @@ const _detail = MovieDetail(
   runtime: 139,
 );
 
-class _FakeMovieRepository implements MovieRepository {
+class _FakeMovieRepository extends StubMovieRepository {
   _FakeMovieRepository({required this.onGetMovieDetail});
 
   final Future<Result<MovieDetail>> Function(int movieId) onGetMovieDetail;
@@ -29,37 +28,6 @@ class _FakeMovieRepository implements MovieRepository {
   @override
   Future<Result<MovieDetail>> getMovieDetail(int movieId) =>
       onGetMovieDetail(movieId);
-
-  @override
-  Future<Result<List<CastMember>>> getMovieCast(int movieId) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getSimilarMovies(int movieId) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getPopularMovies() => throw UnimplementedError();
-
-  @override
-  Stream<List<Movie>> watchPopularMovies() => throw UnimplementedError();
-
-  @override
-  Future<Result<void>> refreshPopularMovies() => throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getMoviesByGenre(int genreId) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getTopRatedMovies() => throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> getUpcomingMovies() => throw UnimplementedError();
-
-  @override
-  Future<Result<List<Movie>>> searchMovies(String query) =>
-      throw UnimplementedError();
 }
 
 MovieDetailCubit _cubit(
