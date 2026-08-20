@@ -12,6 +12,7 @@ Inspired by [flutter-tmdbmovie-bloc-cubit](https://github.com/ihsaninh/flutter-t
 - **Navigation** — Home → Search → Detail → Similar → Detail with back stack
 - **i18n** — English & Arabic UI; locale switcher in settings
 - **Clean Architecture** — domain use cases, Retrofit data layer, Cubit presentation
+- **Offline cache** — Hive-backed cache-first SSOT; home and detail work without network
 
 ## Screenshots
 
@@ -47,6 +48,15 @@ Switch between English and Arabic from the settings sheet.
 
 <p align="center">
   <img src="IMG/Screenshot_1787213421.png" alt="Settings language picker" width="280" />
+</p>
+
+### Offline mode
+
+Cached home and movie detail when the device has no network connection.
+
+<p align="center">
+  <img src="IMG/Screenshot_1787223284.png" alt="Home screen offline with cached movies and stale banner" width="280" />
+  <img src="IMG/Screenshot_1787223287.png" alt="Movie detail offline loaded from Hive cache" width="280" />
 </p>
 
 ## Getting started
