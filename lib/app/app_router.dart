@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../features/movies/presentation/screens/movie_detail_placeholder_screen.dart';
+import '../../features/movies/presentation/screens/movie_detail_screen.dart';
 import '../../features/movies/presentation/screens/movie_home_screen.dart';
 import '../../features/movies/presentation/screens/search_screen.dart';
 import '../../features/movies/presentation/screens/widget_preview_screen.dart';
@@ -30,7 +30,7 @@ abstract final class AppRouter {
         }
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => MovieDetailPlaceholderScreen(movieId: movieId),
+          builder: (_) => MovieDetailScreen(movieId: movieId),
         );
       case AppRoutes.widgetPreview:
         return MaterialPageRoute<void>(
