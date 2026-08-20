@@ -21,12 +21,22 @@ final class PopularMoviesLoading extends PopularMoviesState {
 }
 
 final class PopularMoviesSuccess extends PopularMoviesState {
-  const PopularMoviesSuccess(this.movies);
+  const PopularMoviesSuccess(
+    this.movies, {
+    this.isStale = false,
+    this.isRefreshing = false,
+  });
 
   final List<Movie> movies;
 
+  /// `true` when network refresh failed but cached data is still shown.
+  final bool isStale;
+
+  /// `true` while a background TMDB refresh is in flight.
+  final bool isRefreshing;
+
   @override
-  List<Object?> get props => [movies];
+  List<Object?> get props => [movies, isStale, isRefreshing];
 }
 
 final class PopularMoviesFailure extends PopularMoviesState {

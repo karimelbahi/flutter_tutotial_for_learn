@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_tutotial_for_learn/app/app.dart';
 import 'package:flutter_tutotial_for_learn/core/network/dio_factory.dart';
+import 'package:flutter_tutotial_for_learn/core/storage/hive_service.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/data/api/tmdb_api_provider.dart';
 
 /// Shared test boot sequence matching [main.dart].
@@ -14,6 +15,7 @@ Future<void> initializeMovieAppForTests() async {
   SharedPreferences.setMockInitialValues({});
   await MovieApp.initialize();
   await dotenv.load(fileName: '.env');
+  await HiveService.instance.initForTest();
   DioFactory.instance.configure();
   TmdbApiProvider.instance.configure();
 }

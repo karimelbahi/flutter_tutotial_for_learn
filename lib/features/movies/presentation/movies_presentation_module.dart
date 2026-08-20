@@ -1,13 +1,16 @@
+import '../data/datasources/movie_local_data_source.dart';
+import '../data/datasources/movie_remote_data_source.dart';
 import '../data/repositories/movie_repository_impl.dart';
 import '../domain/entities/genre.dart';
 import '../domain/usecases/get_genre_movies.dart';
-import '../domain/usecases/get_popular_movies.dart';
 import '../domain/usecases/get_movie_cast.dart';
 import '../domain/usecases/get_movie_detail.dart';
 import '../domain/usecases/get_similar_movies.dart';
 import '../domain/usecases/get_top_rated_movies.dart';
 import '../domain/usecases/get_upcoming_movies.dart';
+import '../domain/usecases/refresh_popular_movies.dart';
 import '../domain/usecases/search_movies.dart';
+import '../domain/usecases/watch_popular_movies.dart';
 import 'cubit/genre_movies_cubit.dart';
 import 'cubit/movie_cast_cubit.dart';
 import 'cubit/movie_detail_cubit.dart';
@@ -17,12 +20,22 @@ import 'cubit/similar_movies_cubit.dart';
 import 'cubit/top_rated_movies_cubit.dart';
 import 'cubit/upcoming_movies_cubit.dart';
 
-/// Shared repository instance for home-screen cubits (Step 4+).
-MovieRepositoryImpl _sharedMovieRepository() => MovieRepositoryImpl();
+/// Single shared repository so Hive cache is consistent across home cubits.
+MovieRepositoryImpl? _movieRepository;
+
+MovieRepositoryImpl _sharedMovieRepository() {
+  return _movieRepository ??= MovieRepositoryImpl(
+    remoteDataSource: MovieRemoteDataSourceImpl(),
+    localDataSource: MovieLocalDataSourceImpl(),
+  );
+}
 
 PopularMoviesCubit createPopularMoviesCubit() {
   final repository = _sharedMovieRepository();
-  return PopularMoviesCubit(GetPopularMovies(repository));
+  return PopularMoviesCubit(
+    WatchPopularMovies(repository),
+    RefreshPopularMovies(repository),
+  );
 }
 
 GenreMoviesCubit createGenreMoviesCubit() {

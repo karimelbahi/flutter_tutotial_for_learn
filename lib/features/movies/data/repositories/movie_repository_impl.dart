@@ -7,21 +7,48 @@ import '../../domain/entities/cast_member.dart';
 import '../../domain/entities/movie.dart';
 import '../../domain/entities/movie_detail.dart';
 import '../../domain/repositories/movie_repository.dart';
+import '../datasources/movie_local_data_source.dart';
 import '../datasources/movie_remote_data_source.dart';
 import '../models/movie_model.dart';
 
-/// Concrete repository — bridges domain contract ↔ remote data source.
+/// Concrete repository — coordinates **remote fetch** + **local SSOT cache**.
 ///
-/// Responsibilities:
-/// 1. Call [MovieRemoteDataSource] for raw data
-/// 2. Map [MovieModel] → [Movie] via `toEntity()`
-/// 3. Catch exceptions → return [Result.failure] (never throw to Cubit)
+/// ## Cache-First rules (Principle VI)
+///
+/// | Method prefix | Purpose |
+/// |---------------|---------|
+/// | `watch*` | Read from Hive → map to domain entities → Stream for Cubits |
+/// | `refresh*` | TMDB → save Hive (stream auto-updates watchers) |
+/// | `get*` | Legacy one-shot remote fetch (other cubits until migrated) |
+///
+/// Cubits being migrated call `watch*` + `refresh*` instead of `get*`.
 class MovieRepositoryImpl implements MovieRepository {
-  MovieRepositoryImpl({MovieRemoteDataSource? remoteDataSource})
-      : _remoteDataSource =
-            remoteDataSource ?? MovieRemoteDataSourceImpl();
+  MovieRepositoryImpl({
+    MovieRemoteDataSource? remoteDataSource,
+    MovieLocalDataSource? localDataSource,
+  })  : _remoteDataSource =
+            remoteDataSource ?? MovieRemoteDataSourceImpl(),
+        _localDataSource =
+            localDataSource ?? MovieLocalDataSourceImpl();
 
   final MovieRemoteDataSource _remoteDataSource;
+  final MovieLocalDataSource _localDataSource;
+
+  // ── Cache-First: Popular movies ───────────────────────────────────────────
+
+  @override
+  Stream<List<Movie>> watchPopularMovies() {
+    return _localDataSource.watchPopularMovies().map(_mapMovieModels);
+  }
+
+  @override
+  Future<Result<void>> refreshPopularMovies() {
+    return _refreshMovieList(_remoteDataSource.fetchPopularMovies, (models) {
+      return _localDataSource.savePopularMovies(models);
+    });
+  }
+
+  // ── Legacy one-shot APIs (remote-only until cubit migration) ─────────────
 
   @override
   Future<Result<List<Movie>>> getPopularMovies() {
@@ -90,6 +117,32 @@ class MovieRepositoryImpl implements MovieRepository {
     return _fetchMovies(() => _remoteDataSource.fetchSimilarMovies(movieId));
   }
 
+  // ── Shared helpers ───────────────────────────────────────────────────────
+
+  List<Movie> _mapMovieModels(List<MovieModel> models) {
+    return models.map((model) => model.toEntity()).toList();
+  }
+
+  /// Network → Hive refresh used by every `refresh*` method.
+  Future<Result<void>> _refreshMovieList(
+    Future<List<MovieModel>> Function() fetch,
+    Future<void> Function(List<MovieModel> models) save,
+  ) async {
+    try {
+      final models = await fetch();
+      await save(models);
+      return const Success(null);
+    } on DioException catch (error) {
+      return Error(_mapDioException(error));
+    } on NetworkException catch (error) {
+      return Error(NetworkFailure(error.message));
+    } on ServerException catch (error) {
+      return Error(ServerFailure(error.message));
+    } catch (_) {
+      return const Error(ServerFailure('Unexpected error occurred'));
+    }
+  }
+
   Failure _mapDioException(DioException error) {
     final cause = error.error;
     if (cause is NetworkException) {
@@ -101,14 +154,13 @@ class MovieRepositoryImpl implements MovieRepository {
     return NetworkFailure(error.message ?? 'Network error occurred');
   }
 
-  /// Shared error-handling wrapper for all fetch methods.
+  /// Shared error-handling wrapper for legacy `get*` list methods.
   Future<Result<List<Movie>>> _fetchMovies(
     Future<List<MovieModel>> Function() fetch,
   ) async {
     try {
       final models = await fetch();
-      // Convert every data model to a domain entity before returning
-      final movies = models.map((model) => model.toEntity()).toList();
+      final movies = _mapMovieModels(models);
       return Success(movies);
     } on DioException catch (error) {
       return Error(_mapDioException(error));

@@ -30,6 +30,12 @@ class _FakeMovieRepository implements MovieRepository {
       throw UnimplementedError();
 
   @override
+  Stream<List<Movie>> watchPopularMovies() => throw UnimplementedError();
+
+  @override
+  Future<Result<void>> refreshPopularMovies() => throw UnimplementedError();
+
+  @override
   Future<Result<List<Movie>>> getMoviesByGenre(int genreId) =>
       throw UnimplementedError();
 

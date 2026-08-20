@@ -10,6 +10,12 @@ import '../entities/movie_detail.dart';
 ///
 /// This is the Clean Architecture "port" — easy to mock in tests later.
 abstract class MovieRepository {
+  /// Reactive read from local cache (SSOT). Emits current cache immediately.
+  Stream<List<Movie>> watchPopularMovies();
+
+  /// Fetches from TMDB and writes to local cache. Does not return UI data directly.
+  Future<Result<void>> refreshPopularMovies();
+
   Future<Result<List<Movie>>> getPopularMovies();
 
   Future<Result<List<Movie>>> getMoviesByGenre(int genreId);
