@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/movies/presentation/screens/movie_detail_screen.dart';
@@ -32,7 +33,7 @@ abstract final class AppRouter {
           settings: settings,
           builder: (_) => MovieDetailScreen(movieId: movieId),
         );
-      case AppRoutes.widgetPreview:
+      case AppRoutes.widgetPreview when kDebugMode:
         return MaterialPageRoute<void>(
           settings: settings,
           builder: (_) => const WidgetPreviewScreen(),

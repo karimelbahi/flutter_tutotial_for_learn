@@ -62,7 +62,7 @@ class _MovieHomeView extends StatelessWidget {
       ),
       floatingActionButton: kDebugMode
           ? FloatingActionButton.small(
-              tooltip: 'Widget gallery (Step 2)',
+              tooltip: 'dev.widget_gallery_tooltip'.tr(),
               onPressed: () {
                 Navigator.pushNamed(context, AppRoutes.widgetPreview);
               },

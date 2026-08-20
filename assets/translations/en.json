@@ -38,6 +38,10 @@
   "common": {
     "back": "Back",
     "retry": "Retry",
-    "tba": "TBA"
-  }
+    "tba": "TBA",
+    "unexpected_error": "Something went wrong. Please try again."
+  },
+  "dev": {
+    "widget_gallery_tooltip": "Widget gallery (debug only)"
+  },
 }
