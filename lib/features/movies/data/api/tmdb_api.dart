@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/movie_credits_model.dart';
+import '../models/movie_detail_model.dart';
 import '../models/tmdb_movies_response.dart';
 
 part 'tmdb_api.g.dart';
@@ -53,5 +55,26 @@ abstract class TmdbApi {
     @Query('page') int page,
     @Query('language') String language,
     @Query('include_adult') bool includeAdult,
+  );
+
+  /// Movie detail with backdrop images — spec 003-movie-detail.
+  @GET('/movie/{movie_id}')
+  Future<MovieDetailModel> getMovieDetail(
+    @Path('movie_id') int movieId,
+    @Query('api_key') String apiKey,
+    @Query('append_to_response') String appendToResponse,
+  );
+
+  @GET('/movie/{movie_id}/credits')
+  Future<MovieCreditsModel> getMovieCredits(
+    @Path('movie_id') int movieId,
+    @Query('api_key') String apiKey,
+  );
+
+  @GET('/movie/{movie_id}/similar')
+  Future<TmdbMoviesResponse> getSimilarMovies(
+    @Path('movie_id') int movieId,
+    @Query('api_key') String apiKey,
+    @Query('page') int page,
   );
 }

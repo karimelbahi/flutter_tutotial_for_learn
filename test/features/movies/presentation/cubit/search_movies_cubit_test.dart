@@ -4,7 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tutotial_for_learn/core/errors/failures.dart';
 import 'package:flutter_tutotial_for_learn/core/utils/debouncer.dart';
 import 'package:flutter_tutotial_for_learn/core/utils/result.dart';
+import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/cast_member.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/movie.dart';
+import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/movie_detail.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/repositories/movie_repository.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/search_movies.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/search_movies_cubit.dart';
@@ -41,6 +43,18 @@ class _FakeMovieRepository implements MovieRepository {
 
   @override
   Future<Result<List<Movie>>> searchMovies(String query) => onSearch(query);
+
+  @override
+  Future<Result<MovieDetail>> getMovieDetail(int movieId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Result<List<CastMember>>> getMovieCast(int movieId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Result<List<Movie>>> getSimilarMovies(int movieId) =>
+      throw UnimplementedError();
 }
 
 SearchMoviesCubit _cubit(Future<Result<List<Movie>>> Function(String) handler) {

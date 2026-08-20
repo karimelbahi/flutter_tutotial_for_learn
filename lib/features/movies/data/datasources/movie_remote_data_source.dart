@@ -1,6 +1,8 @@
 import '../../../../core/config/app_config.dart';
 import '../api/tmdb_api.dart';
 import '../api/tmdb_api_provider.dart';
+import '../models/movie_credits_model.dart';
+import '../models/movie_detail_model.dart';
 import '../models/movie_model.dart';
 
 /// Fetches movie lists from TMDB via the Retrofit [TmdbApi] client.
@@ -17,6 +19,12 @@ abstract class MovieRemoteDataSource {
   Future<List<MovieModel>> fetchUpcomingMovies();
 
   Future<List<MovieModel>> fetchSearchMovies(String query);
+
+  Future<MovieDetailModel> fetchMovieDetail(int movieId);
+
+  Future<List<CastMemberModel>> fetchMovieCast(int movieId);
+
+  Future<List<MovieModel>> fetchSimilarMovies(int movieId);
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -80,6 +88,34 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       _page,
       _language,
       false,
+    );
+    return response.results;
+  }
+
+  @override
+  Future<MovieDetailModel> fetchMovieDetail(int movieId) async {
+    return _api.getMovieDetail(
+      movieId,
+      AppConfig.apiKey,
+      'images',
+    );
+  }
+
+  @override
+  Future<List<CastMemberModel>> fetchMovieCast(int movieId) async {
+    final response = await _api.getMovieCredits(
+      movieId,
+      AppConfig.apiKey,
+    );
+    return response.cast;
+  }
+
+  @override
+  Future<List<MovieModel>> fetchSimilarMovies(int movieId) async {
+    final response = await _api.getSimilarMovies(
+      movieId,
+      AppConfig.apiKey,
+      _page,
     );
     return response.results;
   }

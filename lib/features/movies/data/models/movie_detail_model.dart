@@ -1,0 +1,81 @@
+import '../../domain/entities/movie_detail.dart';
+
+/// Parses TMDB movie detail JSON (with `append_to_response=images`).
+class MovieDetailModel {
+  const MovieDetailModel({
+    required this.id,
+    required this.title,
+    required this.voteAverage,
+    required this.revenue,
+    required this.status,
+    this.overview,
+    this.posterPath,
+    this.releaseDate,
+    this.runtime,
+    this.homepage,
+    this.genres = const [],
+    this.backdropPaths = const [],
+  });
+
+  final int id;
+  final String title;
+  final String? overview;
+  final String? posterPath;
+  final String? releaseDate;
+  final int? runtime;
+  final double voteAverage;
+  final int revenue;
+  final String status;
+  final String? homepage;
+  final List<MovieDetailGenre> genres;
+  final List<String> backdropPaths;
+
+  factory MovieDetailModel.fromJson(Map<String, dynamic> json) {
+    final images = json['images'] as Map<String, dynamic>?;
+    final backdrops = images?['backdrops'] as List<dynamic>? ?? const [];
+
+    return MovieDetailModel(
+      id: json['id'] as int? ?? 0,
+      title: json['title'] as String? ?? '',
+      overview: json['overview'] as String?,
+      posterPath: json['poster_path'] as String?,
+      releaseDate: json['release_date'] as String?,
+      runtime: json['runtime'] as int?,
+      voteAverage: (json['vote_average'] as num?)?.toDouble() ?? 0.0,
+      revenue: json['revenue'] as int? ?? 0,
+      status: json['status'] as String? ?? '',
+      homepage: json['homepage'] as String?,
+      genres: (json['genres'] as List<dynamic>?)
+              ?.map(
+                (item) => MovieDetailGenre(
+                  id: (item as Map<String, dynamic>)['id'] as int? ?? 0,
+                  name: item['name'] as String? ?? '',
+                ),
+              )
+              .toList() ??
+          const [],
+      backdropPaths: backdrops
+          .map((item) => (item as Map<String, dynamic>)['file_path'] as String?)
+          .whereType<String>()
+          .where((path) => path.isNotEmpty)
+          .toList(),
+    );
+  }
+
+  MovieDetail toEntity() {
+    return MovieDetail(
+      id: id,
+      title: title,
+      overview: overview,
+      posterPath: posterPath,
+      releaseDate: releaseDate,
+      runtime: runtime,
+      voteAverage: voteAverage,
+      revenue: revenue,
+      status: status,
+      homepage: homepage,
+      genres: genres,
+      backdropPaths: backdropPaths,
+    );
+  }
+}
