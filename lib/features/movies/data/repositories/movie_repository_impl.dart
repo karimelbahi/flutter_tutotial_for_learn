@@ -93,6 +93,53 @@ class MovieRepositoryImpl implements MovieRepository {
     );
   }
 
+  // ── Cache-First: Movie detail screen sections ─────────────────────────────
+
+  @override
+  Stream<MovieDetail?> watchMovieDetail(int movieId) {
+    return _localDataSource
+        .watchMovieDetail(movieId)
+        .map((model) => model?.toEntity());
+  }
+
+  @override
+  Future<Result<void>> refreshMovieDetail(int movieId) {
+    return _refreshVoid(() async {
+      final model = await _remoteDataSource.fetchMovieDetail(movieId);
+      await _localDataSource.saveMovieDetail(movieId, model);
+    });
+  }
+
+  @override
+  Stream<List<CastMember>> watchMovieCast(int movieId) {
+    return _localDataSource.watchMovieCast(movieId).map(
+          (models) => models.map((model) => model.toEntity()).toList(),
+        );
+  }
+
+  @override
+  Future<Result<void>> refreshMovieCast(int movieId) {
+    return _refreshVoid(() async {
+      final models = await _remoteDataSource.fetchMovieCast(movieId);
+      await _localDataSource.saveMovieCast(movieId, models);
+    });
+  }
+
+  @override
+  Stream<List<Movie>> watchSimilarMovies(int movieId) {
+    return _localDataSource
+        .watchSimilarMovies(movieId)
+        .map(_mapMovieModels);
+  }
+
+  @override
+  Future<Result<void>> refreshSimilarMovies(int movieId) {
+    return _refreshMovieList(
+      () => _remoteDataSource.fetchSimilarMovies(movieId),
+      (models) => _localDataSource.saveSimilarMovies(movieId, models),
+    );
+  }
+
   // ── Legacy one-shot APIs (remote-only until cubit migration) ─────────────
 
   @override
@@ -168,7 +215,23 @@ class MovieRepositoryImpl implements MovieRepository {
     return models.map((model) => model.toEntity()).toList();
   }
 
-  /// Network → Hive refresh used by every `refresh*` method.
+  /// Network → Hive refresh for non-list payloads (detail, cast, …).
+  Future<Result<void>> _refreshVoid(Future<void> Function() save) async {
+    try {
+      await save();
+      return const Success(null);
+    } on DioException catch (error) {
+      return Error(_mapDioException(error));
+    } on NetworkException catch (error) {
+      return Error(NetworkFailure(error.message));
+    } on ServerException catch (error) {
+      return Error(ServerFailure(error.message));
+    } catch (_) {
+      return const Error(ServerFailure('Unexpected error occurred'));
+    }
+  }
+
+  /// Network → Hive refresh used by every list `refresh*` method.
   Future<Result<void>> _refreshMovieList(
     Future<List<MovieModel>> Function() fetch,
     Future<void> Function(List<MovieModel> models) save,

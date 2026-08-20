@@ -2,7 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tutotial_for_learn/core/errors/failures.dart';
 import 'package:flutter_tutotial_for_learn/core/utils/result.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/cast_member.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/get_movie_cast.dart';
+import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/refresh_movie_cast.dart';
+import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/watch_movie_cast.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/movie_cast_cubit.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/movie_cast_state.dart';
 
@@ -18,42 +19,59 @@ const _cast = [
 ];
 
 class _FakeMovieRepository extends StubMovieRepository {
-  _FakeMovieRepository({required this.onGetMovieCast});
+  _FakeMovieRepository({
+    required this.watchCast,
+    required this.refreshCast,
+  });
 
-  final Future<Result<List<CastMember>>> Function(int movieId) onGetMovieCast;
+  final Stream<List<CastMember>> Function(int movieId) watchCast;
+  final Future<Result<void>> Function(int movieId) refreshCast;
 
   @override
-  Future<Result<List<CastMember>>> getMovieCast(int movieId) =>
-      onGetMovieCast(movieId);
+  Stream<List<CastMember>> watchMovieCast(int movieId) => watchCast(movieId);
+
+  @override
+  Future<Result<void>> refreshMovieCast(int movieId) => refreshCast(movieId);
 }
 
-MovieCastCubit _cubit(
-  Future<Result<List<CastMember>>> Function(int movieId) handler,
-) {
+MovieCastCubit _cubit(_FakeMovieRepository repository) {
   return MovieCastCubit(
-    GetMovieCast(_FakeMovieRepository(onGetMovieCast: handler)),
+    WatchMovieCast(repository),
+    RefreshMovieCast(repository),
   );
 }
 
 void main() {
-  group('MovieCastCubit', () {
-    test('emits success with cast list', () async {
-      final cubit = _cubit((_) async => Success(_cast));
+  group('MovieCastCubit — cache-first', () {
+    test('emits success with cached cast list', () async {
+      final cubit = _cubit(
+        _FakeMovieRepository(
+          watchCast: (_) => Stream.value(_cast),
+          refreshCast: (_) async => const Success(null),
+        ),
+      );
       addTearDown(cubit.close);
 
       await cubit.load(550);
+      await Future<void>.delayed(Duration.zero);
 
       expect(cubit.state, isA<MovieCastSuccess>());
       expect((cubit.state as MovieCastSuccess).cast, _cast);
     });
 
-    test('emits failure independently of detail', () async {
+    test('emits failure independently when refresh fails without cache',
+        () async {
       final cubit = _cubit(
-        (_) async => const Error(ServerFailure('Cast unavailable')),
+        _FakeMovieRepository(
+          watchCast: (_) => Stream.value(const []),
+          refreshCast: (_) async =>
+              const Error<void>(ServerFailure('Cast unavailable')),
+        ),
       );
       addTearDown(cubit.close);
 
       await cubit.load(550);
+      await Future<void>.delayed(Duration.zero);
 
       expect(cubit.state, isA<MovieCastFailure>());
       expect((cubit.state as MovieCastFailure).message, 'Cast unavailable');

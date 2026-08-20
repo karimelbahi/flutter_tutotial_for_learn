@@ -18,12 +18,18 @@ final class SimilarMoviesLoading extends SimilarMoviesState {
 }
 
 final class SimilarMoviesSuccess extends SimilarMoviesState {
-  const SimilarMoviesSuccess(this.movies);
+  const SimilarMoviesSuccess(
+    this.movies, {
+    this.isStale = false,
+    this.isRefreshing = false,
+  });
 
   final List<Movie> movies;
+  final bool isStale;
+  final bool isRefreshing;
 
   @override
-  List<Object?> get props => [movies];
+  List<Object?> get props => [movies, isStale, isRefreshing];
 }
 
 final class SimilarMoviesFailure extends SimilarMoviesState {

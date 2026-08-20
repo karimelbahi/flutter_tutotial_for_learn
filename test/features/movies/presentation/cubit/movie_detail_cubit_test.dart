@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tutotial_for_learn/core/errors/failures.dart';
 import 'package:flutter_tutotial_for_learn/core/utils/result.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/domain/entities/movie_detail.dart';
-import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/get_movie_detail.dart';
+import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/refresh_movie_detail.dart';
+import 'package:flutter_tutotial_for_learn/features/movies/domain/usecases/watch_movie_detail.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/movie_detail_cubit.dart';
 import 'package:flutter_tutotial_for_learn/features/movies/presentation/cubit/movie_detail_state.dart';
 
@@ -21,47 +24,125 @@ const _detail = MovieDetail(
 );
 
 class _FakeMovieRepository extends StubMovieRepository {
-  _FakeMovieRepository({required this.onGetMovieDetail});
+  _FakeMovieRepository({
+    required this.watchDetail,
+    required this.refreshDetail,
+  });
 
-  final Future<Result<MovieDetail>> Function(int movieId) onGetMovieDetail;
+  final Stream<MovieDetail?> Function(int movieId) watchDetail;
+  final Future<Result<void>> Function(int movieId) refreshDetail;
 
   @override
-  Future<Result<MovieDetail>> getMovieDetail(int movieId) =>
-      onGetMovieDetail(movieId);
+  Stream<MovieDetail?> watchMovieDetail(int movieId) => watchDetail(movieId);
+
+  @override
+  Future<Result<void>> refreshMovieDetail(int movieId) =>
+      refreshDetail(movieId);
 }
 
-MovieDetailCubit _cubit(
-  Future<Result<MovieDetail>> Function(int movieId) handler,
-) {
+MovieDetailCubit _cubit(_FakeMovieRepository repository) {
   return MovieDetailCubit(
-    GetMovieDetail(_FakeMovieRepository(onGetMovieDetail: handler)),
+    WatchMovieDetail(repository),
+    RefreshMovieDetail(repository),
   );
 }
 
 void main() {
-  group('MovieDetailCubit', () {
-    test('emits success with detail', () async {
-      final cubit = _cubit((_) async => Success(_detail));
+  group('MovieDetailCubit — cache-first', () {
+    test('shows cached detail without loading flash', () async {
+      final cubit = _cubit(
+        _FakeMovieRepository(
+          watchDetail: (_) => Stream.value(_detail),
+          refreshDetail: (_) async => const Success(null),
+        ),
+      );
       addTearDown(cubit.close);
 
-      await cubit.load(550);
+      final states = <MovieDetailState>[];
+      final sub = cubit.stream.listen(states.add);
 
+      await cubit.load(550);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(states.any((state) => state is MovieDetailLoading), isFalse);
       expect(cubit.state, isA<MovieDetailSuccess>());
       expect((cubit.state as MovieDetailSuccess).detail, _detail);
+
+      await sub.cancel();
     });
 
-    test('emits failure on error', () async {
+    test('refresh failure with cache marks state as stale', () async {
       final cubit = _cubit(
-        (_) async => const Error(ServerFailure('Network down')),
+        _FakeMovieRepository(
+          watchDetail: (_) => Stream.value(_detail),
+          refreshDetail: (_) async =>
+              const Error<void>(NetworkFailure('offline')),
+        ),
       );
       addTearDown(cubit.close);
 
       await cubit.load(550);
+      await Future<void>.delayed(Duration.zero);
+
+      expect((cubit.state as MovieDetailSuccess).isStale, isTrue);
+    });
+
+    test('ignores stale stream events after newer movieId request', () async {
+      final firstController = StreamController<MovieDetail?>.broadcast();
+      final secondController = StreamController<MovieDetail?>.broadcast();
+
+      final cubit = _cubit(
+        _FakeMovieRepository(
+          watchDetail: (movieId) {
+            if (movieId == 550) return firstController.stream;
+            if (movieId == 807) return secondController.stream;
+            return Stream.value(null);
+          },
+          refreshDetail: (_) async => const Success(null),
+        ),
+      );
+      addTearDown(cubit.close);
+      addTearDown(firstController.close);
+      addTearDown(secondController.close);
+
+      await cubit.load(550);
+      firstController.add(_detail);
+      await Future<void>.delayed(Duration.zero);
+
+      const se7en = MovieDetail(
+        id: 807,
+        title: 'Se7en',
+        voteAverage: 8.3,
+        revenue: 327311859,
+        status: 'Released',
+      );
+
+      await cubit.load(807);
+      secondController.add(se7en);
+      await Future<void>.delayed(Duration.zero);
+
+      firstController.add(_detail);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(cubit.state, isA<MovieDetailSuccess>());
+      expect((cubit.state as MovieDetailSuccess).detail.id, 807);
+    });
+
+    test('refresh failure without cache emits failure', () async {
+      final cubit = _cubit(
+        _FakeMovieRepository(
+          watchDetail: (_) => Stream.value(null),
+          refreshDetail: (_) async =>
+              const Error<void>(ServerFailure('Network down')),
+        ),
+      );
+      addTearDown(cubit.close);
+
+      await cubit.load(550);
+      await Future<void>.delayed(Duration.zero);
 
       expect(cubit.state, isA<MovieDetailFailure>());
-      final state = cubit.state as MovieDetailFailure;
-      expect(state.movieId, 550);
-      expect(state.message, 'Network down');
+      expect((cubit.state as MovieDetailFailure).movieId, 550);
     });
   });
 }

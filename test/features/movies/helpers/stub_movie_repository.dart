@@ -36,6 +36,30 @@ class StubMovieRepository implements MovieRepository {
       throw UnimplementedError();
 
   @override
+  Stream<MovieDetail?> watchMovieDetail(int movieId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Result<void>> refreshMovieDetail(int movieId) =>
+      throw UnimplementedError();
+
+  @override
+  Stream<List<CastMember>> watchMovieCast(int movieId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Result<void>> refreshMovieCast(int movieId) =>
+      throw UnimplementedError();
+
+  @override
+  Stream<List<Movie>> watchSimilarMovies(int movieId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Result<void>> refreshSimilarMovies(int movieId) =>
+      throw UnimplementedError();
+
+  @override
   Future<Result<List<Movie>>> getPopularMovies() => throw UnimplementedError();
 
   @override

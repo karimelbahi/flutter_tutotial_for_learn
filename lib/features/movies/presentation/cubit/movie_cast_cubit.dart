@@ -1,35 +1,124 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/usecases/get_movie_cast.dart';
+import '../../domain/entities/cast_member.dart';
+import '../../domain/usecases/refresh_movie_cast.dart';
+import '../../domain/usecases/watch_movie_cast.dart';
 import '../utils/error_messages.dart';
 import 'movie_cast_state.dart';
 
-/// Loads cast members independently from movie detail (FR-008).
+/// Loads cast independently from detail using **Cache-First SSOT**.
+///
+/// Cast and detail are separate Hive boxes — each section loads/refreshes
+/// on its own schedule (FR-008 from spec 003).
 class MovieCastCubit extends Cubit<MovieCastState> {
-  MovieCastCubit(this._getMovieCast) : super(const MovieCastInitial());
+  MovieCastCubit(
+    this._watchMovieCast,
+    this._refreshMovieCast,
+  ) : super(const MovieCastInitial());
 
-  final GetMovieCast _getMovieCast;
+  final WatchMovieCast _watchMovieCast;
+  final RefreshMovieCast _refreshMovieCast;
 
   int _latestMovieId = 0;
+  StreamSubscription<List<CastMember>>? _subscription;
+  var _hasCache = false;
+  var _isRefreshing = false;
+  var _lastRefreshFailed = false;
 
   Future<void> load(int movieId) async {
     _latestMovieId = movieId;
-    emit(const MovieCastLoading());
+    _hasCache = false;
+    _lastRefreshFailed = false;
+    _isRefreshing = false;
 
-    final result = await _getMovieCast(movieId);
+    await _subscription?.cancel();
 
-    if (isClosed || movieId != _latestMovieId) {
+    _subscription = _watchMovieCast(movieId).listen(
+      (cast) => _onCastFromCache(movieId, cast),
+      onError: (_) {
+        if (!_hasCache && movieId == _latestMovieId) {
+          emit(
+            MovieCastFailure(
+              message: localizedFailureMessage(null),
+              movieId: movieId,
+            ),
+          );
+        }
+      },
+    );
+
+    await _refresh(movieId);
+  }
+
+  void _onCastFromCache(int movieId, List<CastMember> cast) {
+    if (isClosed || movieId != _latestMovieId) return;
+
+    _hasCache = cast.isNotEmpty;
+
+    if (!_hasCache) {
+      if (state is! MovieCastFailure) {
+        emit(const MovieCastLoading());
+      }
       return;
     }
 
-    if (result.isSuccess) {
-      emit(MovieCastSuccess(result.dataOrNull!));
+    emit(
+      MovieCastSuccess(
+        cast,
+        isStale: _lastRefreshFailed,
+        isRefreshing: _isRefreshing,
+      ),
+    );
+  }
+
+  Future<void> _refresh(int movieId) async {
+    if (movieId != _latestMovieId) return;
+
+    _isRefreshing = true;
+    _emitRefreshingFlag(movieId);
+
+    final result = await _refreshMovieCast(movieId);
+
+    if (movieId != _latestMovieId) return;
+
+    _isRefreshing = false;
+    _lastRefreshFailed = result.isFailure;
+
+    if (result.isFailure && !_hasCache) {
+      emit(
+        MovieCastFailure(
+          message: localizedFailureMessage(result.failureOrNull?.message),
+          movieId: movieId,
+        ),
+      );
       return;
     }
 
-    emit(MovieCastFailure(
-      message: localizedFailureMessage(result.failureOrNull?.message),
-      movieId: movieId,
-    ));
+    if (result.isFailure && _hasCache) {
+      _emitRefreshingFlag(movieId);
+    }
+  }
+
+  void _emitRefreshingFlag(int movieId) {
+    if (movieId != _latestMovieId) return;
+
+    final current = state;
+    if (current is! MovieCastSuccess) return;
+
+    emit(
+      MovieCastSuccess(
+        current.cast,
+        isStale: _lastRefreshFailed,
+        isRefreshing: _isRefreshing,
+      ),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
   }
 }

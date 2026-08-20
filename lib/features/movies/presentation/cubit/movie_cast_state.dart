@@ -18,12 +18,18 @@ final class MovieCastLoading extends MovieCastState {
 }
 
 final class MovieCastSuccess extends MovieCastState {
-  const MovieCastSuccess(this.cast);
+  const MovieCastSuccess(
+    this.cast, {
+    this.isStale = false,
+    this.isRefreshing = false,
+  });
 
   final List<CastMember> cast;
+  final bool isStale;
+  final bool isRefreshing;
 
   @override
-  List<Object?> get props => [cast];
+  List<Object?> get props => [cast, isStale, isRefreshing];
 }
 
 final class MovieCastFailure extends MovieCastState {

@@ -28,6 +28,18 @@ abstract class MovieRepository {
 
   Future<Result<void>> refreshMoviesByGenre(int genreId);
 
+  Stream<MovieDetail?> watchMovieDetail(int movieId);
+
+  Future<Result<void>> refreshMovieDetail(int movieId);
+
+  Stream<List<CastMember>> watchMovieCast(int movieId);
+
+  Future<Result<void>> refreshMovieCast(int movieId);
+
+  Stream<List<Movie>> watchSimilarMovies(int movieId);
+
+  Future<Result<void>> refreshSimilarMovies(int movieId);
+
   Future<Result<List<Movie>>> getPopularMovies();
 
   Future<Result<List<Movie>>> getMoviesByGenre(int genreId);

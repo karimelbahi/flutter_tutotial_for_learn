@@ -18,12 +18,18 @@ final class MovieDetailLoading extends MovieDetailState {
 }
 
 final class MovieDetailSuccess extends MovieDetailState {
-  const MovieDetailSuccess(this.detail);
+  const MovieDetailSuccess(
+    this.detail, {
+    this.isStale = false,
+    this.isRefreshing = false,
+  });
 
   final MovieDetail detail;
+  final bool isStale;
+  final bool isRefreshing;
 
   @override
-  List<Object?> get props => [detail];
+  List<Object?> get props => [detail, isStale, isRefreshing];
 }
 
 final class MovieDetailFailure extends MovieDetailState {

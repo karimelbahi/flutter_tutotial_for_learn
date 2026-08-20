@@ -2,16 +2,19 @@ import '../data/datasources/movie_local_data_source.dart';
 import '../data/datasources/movie_remote_data_source.dart';
 import '../data/repositories/movie_repository_impl.dart';
 import '../domain/entities/genre.dart';
-import '../domain/usecases/get_movie_cast.dart';
-import '../domain/usecases/get_movie_detail.dart';
-import '../domain/usecases/get_similar_movies.dart';
 import '../domain/usecases/refresh_genre_movies.dart';
+import '../domain/usecases/refresh_movie_cast.dart';
+import '../domain/usecases/refresh_movie_detail.dart';
 import '../domain/usecases/refresh_popular_movies.dart';
+import '../domain/usecases/refresh_similar_movies.dart';
 import '../domain/usecases/refresh_top_rated_movies.dart';
 import '../domain/usecases/refresh_upcoming_movies.dart';
 import '../domain/usecases/search_movies.dart';
 import '../domain/usecases/watch_genre_movies.dart';
+import '../domain/usecases/watch_movie_cast.dart';
+import '../domain/usecases/watch_movie_detail.dart';
 import '../domain/usecases/watch_popular_movies.dart';
+import '../domain/usecases/watch_similar_movies.dart';
 import '../domain/usecases/watch_top_rated_movies.dart';
 import '../domain/usecases/watch_upcoming_movies.dart';
 import 'cubit/genre_movies_cubit.dart';
@@ -74,15 +77,24 @@ SearchMoviesCubit createSearchMoviesCubit() {
 
 MovieDetailCubit createMovieDetailCubit() {
   final repository = _sharedMovieRepository();
-  return MovieDetailCubit(GetMovieDetail(repository));
+  return MovieDetailCubit(
+    WatchMovieDetail(repository),
+    RefreshMovieDetail(repository),
+  );
 }
 
 MovieCastCubit createMovieCastCubit() {
   final repository = _sharedMovieRepository();
-  return MovieCastCubit(GetMovieCast(repository));
+  return MovieCastCubit(
+    WatchMovieCast(repository),
+    RefreshMovieCast(repository),
+  );
 }
 
 SimilarMoviesCubit createSimilarMoviesCubit() {
   final repository = _sharedMovieRepository();
-  return SimilarMoviesCubit(GetSimilarMovies(repository));
+  return SimilarMoviesCubit(
+    WatchSimilarMovies(repository),
+    RefreshSimilarMovies(repository),
+  );
 }
