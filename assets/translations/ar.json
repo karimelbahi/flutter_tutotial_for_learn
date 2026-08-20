@@ -44,4 +44,13 @@
   "dev": {
     "widget_gallery_tooltip": "معرض المكونات (تصحيح فقط)"
   },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "language_en": "English",
+    "language_ar": "العربية"
+  },
+  "navigation": {
+    "invalid_detail_route": "مسار تفاصيل الفيلم غير صالح."
+  },
 }

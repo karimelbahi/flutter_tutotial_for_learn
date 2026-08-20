@@ -44,4 +44,13 @@
   "dev": {
     "widget_gallery_tooltip": "Widget gallery (debug only)"
   },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "language_en": "English",
+    "language_ar": "Arabic"
+  },
+  "navigation": {
+    "invalid_detail_route": "Invalid movie detail route."
+  },
 }

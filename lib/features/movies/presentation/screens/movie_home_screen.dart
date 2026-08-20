@@ -8,6 +8,7 @@ import '../movies_presentation_module.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/genre_movies_section.dart';
 import '../widgets/popular_movies_carousel_section.dart';
+import '../widgets/settings_locale_sheet.dart';
 import '../widgets/top_rated_movies_section.dart';
 import '../widgets/upcoming_movies_section.dart';
 
@@ -48,6 +49,7 @@ class _MovieHomeView extends StatelessWidget {
         onSearchPressed: () {
           Navigator.pushNamed(context, AppRoutes.search);
         },
+        onSettingsPressed: () => showSettingsLocaleSheet(context),
       ),
       body: const SingleChildScrollView(
         child: Column(

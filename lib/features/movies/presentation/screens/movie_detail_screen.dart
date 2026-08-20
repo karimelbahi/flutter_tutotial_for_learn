@@ -19,6 +19,7 @@ import '../movies_presentation_module.dart';
 import '../navigation/movie_navigation.dart';
 import '../widgets/carousel_item.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/settings_locale_sheet.dart';
 import '../widgets/movie_card.dart';
 import '../widgets/section_header.dart';
 import '../../domain/entities/movie_detail.dart';
@@ -66,6 +67,7 @@ class _MovieDetailView extends StatelessWidget {
         title: 'detail.title'.tr(),
         showSearchButton: false,
         showLogoLeading: false,
+        onSettingsPressed: () => showSettingsLocaleSheet(context),
       ),
       body: BlocBuilder<MovieDetailCubit, MovieDetailState>(
         builder: (context, state) {
