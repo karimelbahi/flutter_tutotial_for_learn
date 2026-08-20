@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/get_upcoming_movies.dart';
+import '../utils/error_messages.dart';
 import 'upcoming_movies_state.dart';
 
 /// Loads TMDB upcoming movies for the home horizontal row.
@@ -21,7 +22,7 @@ class UpcomingMoviesCubit extends Cubit<UpcomingMoviesState> {
     }
 
     emit(UpcomingMoviesFailure(
-      result.failureOrNull?.message ?? 'Unexpected error occurred',
+      localizedFailureMessage(result.failureOrNull?.message),
     ));
   }
 }

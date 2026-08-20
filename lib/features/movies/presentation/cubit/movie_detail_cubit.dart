@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/get_movie_detail.dart';
+import '../utils/error_messages.dart';
 import 'movie_detail_state.dart';
 
 /// Loads full movie detail for the detail screen.
@@ -30,7 +31,7 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
     }
 
     emit(MovieDetailFailure(
-      message: result.failureOrNull?.message ?? 'Unexpected error occurred',
+      message: localizedFailureMessage(result.failureOrNull?.message),
       movieId: movieId,
     ));
   }

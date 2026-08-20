@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/get_popular_movies.dart';
+import '../utils/error_messages.dart';
 import 'popular_movies_state.dart';
 
 /// Loads TMDB popular movies for the home carousel banner.
@@ -24,7 +25,7 @@ class PopularMoviesCubit extends Cubit<PopularMoviesState> {
     }
 
     emit(PopularMoviesFailure(
-      result.failureOrNull?.message ?? 'Unexpected error occurred',
+      localizedFailureMessage(result.failureOrNull?.message),
     ));
   }
 }

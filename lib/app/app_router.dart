@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -50,9 +51,15 @@ class _InvalidMovieDetailRouteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Movie DB')),
-      body: const Center(
-        child: Text('Invalid movie detail route.'),
+      appBar: AppBar(title: Text('home.title'.tr())),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            'navigation.invalid_detail_route'.tr(),
+            textAlign: TextAlign.center,
+          ),
+        ),
       ),
     );
   }

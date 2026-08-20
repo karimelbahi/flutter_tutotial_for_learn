@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/get_top_rated_movies.dart';
+import '../utils/error_messages.dart';
 import 'top_rated_movies_state.dart';
 
 /// Loads TMDB top-rated movies for the home horizontal row.
@@ -21,7 +22,7 @@ class TopRatedMoviesCubit extends Cubit<TopRatedMoviesState> {
     }
 
     emit(TopRatedMoviesFailure(
-      result.failureOrNull?.message ?? 'Unexpected error occurred',
+      localizedFailureMessage(result.failureOrNull?.message),
     ));
   }
 }

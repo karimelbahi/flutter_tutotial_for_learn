@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/get_similar_movies.dart';
+import '../utils/error_messages.dart';
 import 'similar_movies_state.dart';
 
 /// Loads similar movies for the horizontal row on the detail screen.
@@ -28,7 +29,7 @@ class SimilarMoviesCubit extends Cubit<SimilarMoviesState> {
     }
 
     emit(SimilarMoviesFailure(
-      message: result.failureOrNull?.message ?? 'Unexpected error occurred',
+      message: localizedFailureMessage(result.failureOrNull?.message),
       movieId: movieId,
     ));
   }

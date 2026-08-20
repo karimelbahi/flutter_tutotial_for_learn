@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/get_genre_movies.dart';
+import '../utils/error_messages.dart';
 import 'genre_movies_state.dart';
 
 /// Loads movies for the selected TMDB genre tab.
@@ -36,7 +37,7 @@ class GenreMoviesCubit extends Cubit<GenreMoviesState> {
 
     emit(GenreMoviesFailure(
       genreId: genreId,
-      message: result.failureOrNull?.message ?? 'Unexpected error occurred',
+      message: localizedFailureMessage(result.failureOrNull?.message),
     ));
   }
 }

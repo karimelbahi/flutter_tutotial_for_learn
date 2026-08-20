@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/search_movies.dart';
+import '../utils/error_messages.dart';
 import 'search_movies_state.dart';
 
 /// Loads TMDB search results for a debounced text query.
@@ -41,7 +42,7 @@ class SearchMoviesCubit extends Cubit<SearchMoviesState> {
     }
 
     emit(SearchMoviesFailure(
-      message: result.failureOrNull?.message ?? 'Unexpected error occurred',
+      message: localizedFailureMessage(result.failureOrNull?.message),
       query: trimmed,
     ));
   }

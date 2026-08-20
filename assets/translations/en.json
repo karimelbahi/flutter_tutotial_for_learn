@@ -39,7 +39,8 @@
     "back": "Back",
     "retry": "Retry",
     "tba": "TBA",
-    "unexpected_error": "Something went wrong. Please try again."
+    "unexpected_error": "Something went wrong. Please try again.",
+    "network_error": "Network error. Check your connection and try again."
   },
   "dev": {
     "widget_gallery_tooltip": "Widget gallery (debug only)"
@@ -52,5 +53,5 @@
   },
   "navigation": {
     "invalid_detail_route": "Invalid movie detail route."
-  },
+  }
 }
