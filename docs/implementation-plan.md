@@ -247,22 +247,22 @@ main.dart
 
 | Task | Description | Status |
 |------|-------------|--------|
-| 9.1 | Spec + plan + tasks — `specs/003-movie-detail/` | ⬜ |
-| 9.2 | Domain: `MovieDetail`, `CastMember`, `SimilarMovie` entities | ⬜ |
-| 9.3 | Data: detail / credits / similar Retrofit endpoints + models | ⬜ |
-| 9.4 | Use cases: get detail, get cast, get similar | ⬜ |
-| 9.5 | Cubit: `MovieDetailCubit` | ⬜ |
-| 9.6 | Cubit: `MovieCastCubit` | ⬜ |
-| 9.7 | Cubit: `SimilarMoviesCubit` | ⬜ |
-| 9.8 | UI: Backdrop carousel (reuse `CarouselItem`) | ⬜ |
-| 9.9 | UI: Title, year, runtime, popup menu (share / website) | ⬜ |
-| 9.10 | UI: Poster + genre chips + overview | ⬜ |
-| 9.11 | UI: Stats row — rating, status, language | ⬜ |
-| 9.12 | UI: Cast horizontal list | ⬜ |
-| 9.13 | UI: Similar movies row (reuse `MovieCard` + `SectionHeader`) | ⬜ |
-| 9.14 | Navigation: similar movie tap → same screen, new `movieId` | ⬜ |
-| 9.15 | Replace detail placeholder route with real screen | ⬜ |
-| 9.16 | i18n: detail labels, menu items, section headers (en + ar) | ⬜ |
+| 9.1 | Spec + plan + tasks — `specs/003-movie-detail/` | ✅ |
+| 9.2 | Domain: `MovieDetail`, `CastMember`, `SimilarMovie` entities | ✅ |
+| 9.3 | Data: detail / credits / similar Retrofit endpoints + models | ✅ |
+| 9.4 | Use cases: get detail, get cast, get similar | ✅ |
+| 9.5 | Cubit: `MovieDetailCubit` | ✅ |
+| 9.6 | Cubit: `MovieCastCubit` | ✅ |
+| 9.7 | Cubit: `SimilarMoviesCubit` | ✅ |
+| 9.8 | UI: Backdrop carousel (reuse `CarouselItem`) | ✅ |
+| 9.9 | UI: Title, year, runtime, popup menu (share / website) | ✅ |
+| 9.10 | UI: Poster + genre chips + overview | ✅ |
+| 9.11 | UI: Stats row — rating, status, language | ✅ |
+| 9.12 | UI: Cast horizontal list | ✅ |
+| 9.13 | UI: Similar movies row (reuse `MovieCard` + `SectionHeader`) | ✅ |
+| 9.14 | Navigation: similar movie tap → same screen, new `movieId` | ✅ |
+| 9.15 | Replace detail placeholder route with real screen | ✅ |
+| 9.16 | i18n: detail labels, menu items, section headers (en + ar) | ✅ |
 
 **Reference**: `flutter-tmdbmovie-bloc-cubit/lib/screens/movie_detail.dart`
 
@@ -287,12 +287,12 @@ main.dart
 | Task | Description | Status |
 |------|-------------|--------|
 | 10.1 | Remove debug `WidgetPreviewScreen` route (or gate behind dev flag) | ⬜ |
-| 10.2 | Remove search + detail placeholder screens | ⬜ |
+| 10.2 | Remove search + detail placeholder screens | 🔄 (detail done; search done in Phase 8) |
 | 10.3 | Consistent back navigation across all screens | ⬜ |
 | 10.4 | Full i18n audit — no hardcoded UI strings | ⬜ |
 | 10.5 | Error / empty / loading states on every screen | ⬜ |
 | 10.6 | `dart analyze lib/` clean | ✅ |
-| 10.7 | Widget tests for critical cubits (optional) | ⬜ |
+| 10.7 | Widget tests for critical cubits (optional) | 🔄 (detail + search cubits covered) |
 | 10.8 | Compare UI to reference screenshots (`screenshoots/ss1–ss7.jpg`) | ⬜ |
 
 **Checkpoint**: App matches reference app flow: Home → Search → Detail → Similar → Detail, with bilingual UI.
@@ -326,15 +326,14 @@ Phase 5  Domain & data           ███████████████�
 Phase 6  Shared widgets          ████████████████████  100%  ✅
 Phase 7  Home screen             ████████████████████  100%  ✅
 Phase 8  Search screen           ████████████████████  100%  ✅
-Phase 9  Detail screen           ░░░░░░░░░░░░░░░░░░░░    0%  ⬜  ← YOU ARE HERE
-Phase 10 Polish                  ██░░░░░░░░░░░░░░░░░░   10%  🔄
+Phase 9  Detail screen           ████████████████████  100%  ✅
+Phase 10 Polish                  ████░░░░░░░░░░░░░░░░   20%  🔄
 ```
 
 ### Next action
 
-1. **Run `/speckit-specify`** (or use existing plan) for `003-movie-detail`.
-2. **Run `/speckit-plan`** and `/speckit-tasks` for detail screen.
-3. Implement detail one commit at a time per `docs/implementation-plan.md` Phase 9.
+1. **Phase 10 polish** — back navigation audit, remove dev widget preview route, reference screenshot compare.
+2. Optional: Hive cache, favorites, locale switcher (Phase 11).
 
 ---
 

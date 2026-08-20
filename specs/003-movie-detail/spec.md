@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-20
 
-**Status**: Draft
+**Status**: Complete
 
 **Input**: User description: "Build the full movie detail screen: backdrop carousel, title/year/runtime, poster with genre chips and overview, stats row (rating, revenue, status), cast horizontal list, similar movies row, popup menu (share/website). Match reference TMDB movie app. Replace detail placeholder from home and search navigation."
 
