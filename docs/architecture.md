@@ -51,19 +51,34 @@ This project follows **Clean Architecture** with a **Feature-First** folder layo
 - One Cubit per screen or cohesive UI flow.
 - States extend `Equatable` with clear names: `Initial`, `Loading`, `Success`, `Failure`.
 
-## Data Flow (example: fetch popular movies)
+## Data Flow — Cache-First SSOT (spec 005)
+
+Hive is the **Single Source of Truth** for UI-bound movie data. The UI never reads network responses directly.
 
 ```
 MovieHomeScreen
-  → context.read<PopularMoviesCubit>().load()
-  → GetPopularMoviesUseCase.call()
-  → MovieRepository.getPopularMovies()        [abstract, domain]
-  → MovieRepositoryImpl.getPopularMovies()    [data]
-  → MovieRemoteDataSource.fetchPopularMovies()
-  → TmdbApi.getPopularMovies()              [Retrofit, feature data/api/]
-  → JSON → MovieModel → entity/UI model
-  → Cubit emits PopularMoviesSuccess(movies)
+  → PopularMoviesCubit.load()
+  → WatchPopularMovies() / RefreshPopularMovies()     [domain use cases]
+  → MovieRepository.watchPopularMovies()              [abstract, domain]
+  → MovieRepositoryImpl                                 [data]
+      ├─ watch: MovieLocalDataSource → Hive box.watch()
+      └─ refresh: MovieRemoteDataSource → TmdbApi → save Hive
+  → Cubit subscribes to watch stream → PopularMoviesSuccess(movies)
   → BlocBuilder rebuilds carousel
+
+On refresh failure with cache: Cubit keeps Success + isStale → CacheStaleBanner
+```
+
+**Exceptions:** `SearchMoviesCubit` stays network-first (no search cache in v1).
+
+### Legacy one-shot `get*` methods
+
+Deprecated on `MovieRepository` — use `watch*` + `refresh*` instead. Search still uses `searchMovies()`.
+
+## Data Flow (legacy reference — pre-SSOT)
+
+```
+MovieHomeScreen → getPopularMovies() → remote only → Cubit Success
 ```
 
 ## Localization
@@ -78,8 +93,16 @@ MovieHomeScreen
 | Storage                 | Package                  | Use for                                      |
 |-------------------------|--------------------------|----------------------------------------------|
 | Secure tokens/secrets   | `flutter_secure_storage` | API tokens, refresh tokens                     |
-| Structured local cache  | `hive` / `hive_flutter`  | Movie lists, favorites, offline cache        |
+| Structured local cache  | `hive` / `hive_flutter`  | Movie lists, detail, cast, similar (SSOT)    |
 | Simple preferences      | `shared_preferences`     | Theme mode, locale override, onboarding flags |
+
+### Hive cache (SSOT)
+
+- Initialized in `main()` via `HiveService` (`lib/core/storage/`)
+- Written by `MovieLocalDataSource` after successful TMDB fetch
+- Read by Cubits through `MovieRepository.watch*()` streams
+- Boxes: `movies_lists`, `movie_details`, `movie_cast`, `similar_movies`, `cache_metadata`
+- See `specs/005-cache-first-ssot/` for full design
 
 ## Networking
 

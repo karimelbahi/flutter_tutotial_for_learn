@@ -43,17 +43,24 @@ abstract class MovieRepository {
   /// Network-first in v1 (spec 005) — search queries are not cached in Hive.
   Future<Result<List<Movie>>> searchMovies(String query);
 
+  @Deprecated('Use watchPopularMovies + refreshPopularMovies. Spec 005 SSOT.')
   Future<Result<List<Movie>>> getPopularMovies();
 
+  @Deprecated('Use watchMoviesByGenre + refreshMoviesByGenre. Spec 005 SSOT.')
   Future<Result<List<Movie>>> getMoviesByGenre(int genreId);
 
+  @Deprecated('Use watchTopRatedMovies + refreshTopRatedMovies. Spec 005 SSOT.')
   Future<Result<List<Movie>>> getTopRatedMovies();
 
+  @Deprecated('Use watchUpcomingMovies + refreshUpcomingMovies. Spec 005 SSOT.')
   Future<Result<List<Movie>>> getUpcomingMovies();
 
+  @Deprecated('Use watchMovieDetail + refreshMovieDetail. Spec 005 SSOT.')
   Future<Result<MovieDetail>> getMovieDetail(int movieId);
 
+  @Deprecated('Use watchMovieCast + refreshMovieCast. Spec 005 SSOT.')
   Future<Result<List<CastMember>>> getMovieCast(int movieId);
 
+  @Deprecated('Use watchSimilarMovies + refreshSimilarMovies. Spec 005 SSOT.')
   Future<Result<List<Movie>>> getSimilarMovies(int movieId);
 }
