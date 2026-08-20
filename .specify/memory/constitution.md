@@ -1,10 +1,11 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 → 1.1.0
-- Modified principles: V (Networking — DioClient → Retrofit + DioFactory)
-- Added sections: None
+- Version change: 1.1.0 → 1.2.0
+- Modified principles: None
+- Added sections: Principle VI — Cache-First Single Source of Truth (SSOT)
 - Removed sections: None
 - Deferred TODOs: None
+- Spec reference: specs/005-cache-first-ssot/
 -->
 
 # Flutter Movie App Constitution
@@ -69,6 +70,27 @@ Prefer the smallest correct change; avoid over-engineering and unrelated refacto
 **Rationale:** Prevents credential leaks and keeps the learning-focused codebase
 focused.
 
+### VI. Cache-First Single Source of Truth (SSOT)
+
+For UI-bound movie data, the **local Hive cache is the Single Source of Truth**.
+The UI MUST read movie data only through repository **watch streams** backed by
+Hive; it MUST NOT consume network responses directly.
+
+| Path | Rule |
+|------|------|
+| Read | UI ← Cubit ← UseCase ← Repository.watch*() ← Hive |
+| Write | Network → RemoteDataSource → LocalDataSource → Hive |
+| Refresh | Cubits trigger Repository.refresh*(); failures with valid cache MUST keep showing cached data |
+| Flicker | Emit cached data before network refresh completes; avoid Loading when cache is non-empty |
+| Search | Network-first exception in v1 (no search query cache unless a spec amends this) |
+
+Repositories MUST coordinate remote and local datasources. Cubits MUST subscribe
+to watch streams and cancel subscriptions in `close()`. Network errors with
+non-empty cache MUST NOT replace success UI with a blank failure state.
+
+**Rationale:** Instant reopen UX, offline resilience, and a single reactive
+data path that scales as features grow.
+
 ## Technology Stack Requirements
 
 The following stack is mandatory unless this constitution is amended:
@@ -121,4 +143,4 @@ usage, localization keys, design tokens, and no committed secrets.
 **Runtime guidance:** Use `docs/architecture.md`, `docs/development-workflow.md`,
 and `.cursor/skills/flutter-movie-app/SKILL.md` for detailed conventions.
 
-**Version**: 1.1.0 | **Ratified**: 2026-08-20 | **Last Amended**: 2026-08-20
+**Version**: 1.2.0 | **Ratified**: 2026-08-20 | **Last Amended**: 2026-08-20
