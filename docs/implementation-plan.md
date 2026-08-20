@@ -286,14 +286,14 @@ main.dart
 
 | Task | Description | Status |
 |------|-------------|--------|
-| 10.1 | Remove debug `WidgetPreviewScreen` route (or gate behind dev flag) | ⬜ |
-| 10.2 | Remove search + detail placeholder screens | 🔄 (detail done; search done in Phase 8) |
-| 10.3 | Consistent back navigation across all screens | ⬜ |
-| 10.4 | Full i18n audit — no hardcoded UI strings | ⬜ |
-| 10.5 | Error / empty / loading states on every screen | ⬜ |
+| 10.1 | Remove debug `WidgetPreviewScreen` route (or gate behind dev flag) | ✅ |
+| 10.2 | Remove search + detail placeholder screens | ✅ |
+| 10.3 | Consistent back navigation across all screens | ✅ |
+| 10.4 | Full i18n audit — no hardcoded UI strings | ✅ |
+| 10.5 | Error / empty / loading states on every screen | ✅ |
 | 10.6 | `dart analyze lib/` clean | ✅ |
-| 10.7 | Widget tests for critical cubits (optional) | 🔄 (detail + search cubits covered) |
-| 10.8 | Compare UI to reference screenshots (`screenshoots/ss1–ss7.jpg`) | ⬜ |
+| 10.7 | Widget tests for critical cubits (optional) | ✅ |
+| 10.8 | Compare UI to reference screenshots (`screenshoots/ss1–ss7.jpg`) | 🔄 manual |
 
 **Checkpoint**: App matches reference app flow: Home → Search → Detail → Similar → Detail, with bilingual UI.
 
@@ -327,13 +327,13 @@ Phase 6  Shared widgets          ███████████████�
 Phase 7  Home screen             ████████████████████  100%  ✅
 Phase 8  Search screen           ████████████████████  100%  ✅
 Phase 9  Detail screen           ████████████████████  100%  ✅
-Phase 10 Polish                  ████░░░░░░░░░░░░░░░░   20%  🔄
+Phase 10 Polish                  ████████████████████  100%  ✅
 ```
 
 ### Next action
 
-1. **Phase 10 polish** — back navigation audit, remove dev widget preview route, reference screenshot compare.
-2. Optional: Hive cache, favorites, locale switcher (Phase 11).
+1. **Phase 11 optional** — Hive cache, pull-to-refresh, favorites, locale persistence.
+2. Manual screenshot compare against reference (`screenshoots/ss1–ss7.jpg`).
 
 ---
 

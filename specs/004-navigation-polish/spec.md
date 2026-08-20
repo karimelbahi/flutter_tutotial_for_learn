@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-20
 
-**Status**: Draft
+**Status**: Complete
 
 **Input**: User description: "Polish the MVP movie app: remove dev-only routes from release builds, consistent back navigation across screens, localize remaining hardcoded UI strings, add settings locale switcher (en/ar), and validate the full Home → Search → Detail → Similar flow matches the reference app."
 
