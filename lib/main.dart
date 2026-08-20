@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'app/app.dart';
 import 'core/network/dio_factory.dart';
+import 'core/storage/hive_service.dart';
 import 'features/movies/data/api/tmdb_api_provider.dart';
 
 Future<void> main() async {
@@ -13,7 +14,10 @@ Future<void> main() async {
   // 2. Load TMDB API key from .env (gitignored)
   await dotenv.load(fileName: '.env');
 
-  // 3. Configure HTTP + Retrofit (Step 0)
+  // 3. Local cache (SSOT) — must run before any repository reads/writes Hive
+  await HiveService.instance.init();
+
+  // 4. Configure HTTP + Retrofit (Step 0)
   DioFactory.instance.configure();
   TmdbApiProvider.instance.configure();
 
