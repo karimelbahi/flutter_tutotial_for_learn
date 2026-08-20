@@ -164,6 +164,7 @@ class MovieRepositoryImpl implements MovieRepository {
 
   @override
   Future<Result<List<Movie>>> searchMovies(String query) {
+    // Search is **network-first** in v1 (spec 005-cache-first-ssot) — no Hive cache.
     final trimmed = query.trim();
     if (trimmed.isEmpty) {
       return Future.value(const Success([]));

@@ -7,6 +7,7 @@ import '../../../../core/constants/app_routes.dart';
 import '../movies_presentation_module.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/genre_movies_section.dart';
+import '../widgets/home_cache_stale_banner.dart';
 import '../widgets/popular_movies_carousel_section.dart';
 import '../widgets/settings_locale_sheet.dart';
 import '../widgets/top_rated_movies_section.dart';
@@ -55,6 +56,7 @@ class _MovieHomeView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            HomeCacheStaleBanner(),
             PopularMoviesCarouselSection(),
             GenreMoviesSection(),
             TopRatedMoviesSection(),

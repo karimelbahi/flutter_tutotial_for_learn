@@ -53,5 +53,9 @@
   },
   "navigation": {
     "invalid_detail_route": "Invalid movie detail route."
+  },
+  "cache": {
+    "stale": "Showing saved data — connect to refresh.",
+    "offline": "You're offline. Showing saved movies."
   }
 }

@@ -40,6 +40,9 @@ abstract class MovieRepository {
 
   Future<Result<void>> refreshSimilarMovies(int movieId);
 
+  /// Network-first in v1 (spec 005) — search queries are not cached in Hive.
+  Future<Result<List<Movie>>> searchMovies(String query);
+
   Future<Result<List<Movie>>> getPopularMovies();
 
   Future<Result<List<Movie>>> getMoviesByGenre(int genreId);
@@ -47,8 +50,6 @@ abstract class MovieRepository {
   Future<Result<List<Movie>>> getTopRatedMovies();
 
   Future<Result<List<Movie>>> getUpcomingMovies();
-
-  Future<Result<List<Movie>>> searchMovies(String query);
 
   Future<Result<MovieDetail>> getMovieDetail(int movieId);
 

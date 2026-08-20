@@ -18,6 +18,7 @@ import '../cubit/similar_movies_state.dart';
 import '../movies_presentation_module.dart';
 import '../navigation/movie_navigation.dart';
 import '../widgets/carousel_item.dart';
+import '../widgets/cache_stale_banner.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/settings_locale_sheet.dart';
 import '../widgets/movie_card.dart';
@@ -73,7 +74,8 @@ class _MovieDetailView extends StatelessWidget {
         builder: (context, state) {
           return switch (state) {
             MovieDetailInitial() || MovieDetailLoading() => _loadingBody(context),
-            MovieDetailSuccess(:final detail) => _detailBody(context, detail),
+            MovieDetailSuccess(:final detail, :final isStale) =>
+              _detailBody(context, detail, showStaleBanner: isStale),
             MovieDetailFailure(:final message) => _errorBody(context, message),
           };
         },
@@ -115,11 +117,16 @@ class _MovieDetailView extends StatelessWidget {
     );
   }
 
-  Widget _detailBody(BuildContext context, MovieDetail detail) {
+  Widget _detailBody(
+    BuildContext context,
+    MovieDetail detail, {
+    required bool showStaleBanner,
+  }) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (showStaleBanner) const CacheStaleBanner(),
           _BackdropCarousel(backdropPaths: detail.backdropPaths),
           _TitleSection(detail: detail),
           const _DetailDivider(),
