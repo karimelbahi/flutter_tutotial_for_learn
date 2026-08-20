@@ -13,7 +13,7 @@
   },
   "search": {
     "title": "Search",
-    "hint": "Search",
+    "hint": "Search movies...",
     "empty": "No movies found for your search.",
     "error": "Could not load search results."
   },

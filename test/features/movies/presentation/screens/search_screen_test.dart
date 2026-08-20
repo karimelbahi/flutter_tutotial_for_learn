@@ -31,7 +31,7 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
 
     expect(find.byType(SearchFormField), findsOneWidget);
-    expect(find.text('Search'), findsOneWidget);
-    expect(find.byIcon(Icons.close), findsOneWidget);
+    expect(find.text('Search movies...'), findsOneWidget);
+    expect(find.byIcon(Icons.search), findsOneWidget);
   });
 }

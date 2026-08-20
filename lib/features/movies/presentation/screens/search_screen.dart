@@ -69,17 +69,18 @@ class _SearchScreenBodyState extends State<_SearchScreenBody> {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-        title: SearchFormField(
-          controller: _textFieldController,
-          onChanged: _onQueryChanged,
-          placeholder: 'search.hint'.tr(),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: _onPressClear,
+        centerTitle: false,
+        leadingWidth: 48,
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsets.only(right: AppSpacing.screenPadding),
+          child: SearchFormField(
+            controller: _textFieldController,
+            onChanged: _onQueryChanged,
+            placeholder: 'search.hint'.tr(),
+            onClear: _onPressClear,
           ),
-        ],
+        ),
       ),
       body: BlocBuilder<SearchMoviesCubit, SearchMoviesState>(
         builder: (context, state) {

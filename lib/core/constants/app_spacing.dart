@@ -39,4 +39,8 @@ abstract final class AppSpacing {
   static const double dotMarginHorizontal = 3;
 
   static const double tabIndicatorWeight = 3;
+
+  static const double searchBarHeight = 40;
+  static const double searchBarRadius = 8;
+  static const double searchBarHorizontalPadding = 12;
 }
